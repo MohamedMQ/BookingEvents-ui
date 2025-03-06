@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SidbarComponent } from './sidbar.component';
+import { SingleEventComponent } from './single-event.component';
 
-describe('SidbarComponent', () => {
-  let component: SidbarComponent;
-  let fixture: ComponentFixture<SidbarComponent>;
+describe('SingleEventComponent', () => {
+  let component: SingleEventComponent;
+  let fixture: ComponentFixture<SingleEventComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SidbarComponent]
+      imports: [SingleEventComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SidbarComponent);
+    fixture = TestBed.createComponent(SingleEventComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
