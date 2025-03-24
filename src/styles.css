@@ -1,1 +1,11 @@
 @import "tailwindcss";
+/* @import 'ngx-toastr/toastr'; */
+
+body {
+  background-color: #F3F4F6;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+  position: relative;
+}

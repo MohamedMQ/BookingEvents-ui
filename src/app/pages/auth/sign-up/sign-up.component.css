@@ -1,0 +1,17 @@
+.invalid {
+  border: 2px solid red;
+}
+
+.tooltip-show:hover #username-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-show:hover #password-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.hide {
+  display: block;
+}

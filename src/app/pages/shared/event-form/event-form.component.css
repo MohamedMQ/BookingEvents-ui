@@ -1,0 +1,44 @@
+.invalid {
+  border: 2px solid red;
+}
+
+.tooltip-show:hover #EventName-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-show:hover #description-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-show:hover #location-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-show:hover #pricePerTicket-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip-show:hover #totalTicketAvailable-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.hide {
+  display: block;
+}
+
+/* For webkit-based browsers (Chrome, Safari, Edge) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* For Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

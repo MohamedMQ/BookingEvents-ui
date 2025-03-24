@@ -1,0 +1,439 @@
+<!-- *ngIf="start"  -->
+<div class="max-w-[900px] m-auto mt-8 pb-2 rounded-lg bg-white shadow-xl" *ngIf="!isFetching; else fetchingEvent" > 
+  <div
+    class="flex flex-col gap-3 text-gray-100 py-10 px-8 bg-gradient-to-r from-blue-700 to-blue-900 rounded-t-lg"
+  >
+    <h1 class="font-bold text-3xl">Create New Event</h1>
+    <p class="text-lg">List your event and start selling tickets</p>
+  </div>
+  <form
+    class="p-6 flex flex-col gap-6"
+    [formGroup]="form"
+    (ngSubmit)="onCreateOrUpdate()"
+  >
+    <div class="flex flex-col gap-2">
+      <label class="font-medium text-gray-700" for="EventName"
+        >Event Name</label
+      >
+      <div
+        class="border-2 border-gray-200 p-1.5 rounded-md relative"
+        [class.invalid]="
+          (form.controls['name'].hasError('required') ||
+            form.controls['name'].hasError('pattern')) &&
+          isSubmited
+        "
+      >
+        <input
+          class="outline-none w-full"
+          id="name"
+          type="text"
+          formControlName="name"
+        />
+        <div
+          class="tooltip-show absolute right-0 top-1/2 hidden"
+          [class.hide]="
+            (form.controls['name'].hasError('required') ||
+              form.controls['name'].hasError('pattern')) &&
+            isSubmited
+          "
+        >
+          <fa-icon
+            class="absolute top-1/2 -translate-1/2 right-0 text-red-600"
+            data-tooltip-target="EventName-tooltip"
+            [icon]="faCircleExclamation"
+          ></fa-icon>
+          <div
+            id="EventName-tooltip"
+            class="absolute bg-gray-700 text-white text-xs rounded px-2 py-1 invisible opacity-0 transition-opacity duration-300 bottom-full right-0 mb-2 w-50"
+          >
+            Event Name must be 3-48 characters long and can only contain
+            letters, numbers, spaces and hyphens.
+          </div>
+        </div>
+      </div>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="form.controls['name'].hasError('required') && isSubmited"
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Enter Event Name
+      </p>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="form.controls['name'].hasError('pattern') && isSubmited"
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Invalid Event Name
+      </p>
+    </div>
+    <div class="flex flex-col gap-2">
+      <label class="font-medium text-gray-700" for="Description"
+        >Description</label
+      >
+      <div
+        class="border-2 border-gray-200 p-1.5 rounded-md relative"
+        [class.invalid]="
+          (form.controls['description'].hasError('required') ||
+            form.controls['description'].hasError('pattern')) &&
+          isSubmited
+        "
+      >
+        <textarea
+          class="outline-none w-full p-2"
+          formControlName="description"
+          id="Description"
+        ></textarea>
+        <div
+          class="tooltip-show absolute right-0 top-1/2 hidden"
+          [class.hide]="
+            (form.controls['description'].hasError('required') ||
+              form.controls['description'].hasError('pattern')) &&
+            isSubmited
+          "
+        >
+          <fa-icon
+            class="absolute bottom-full -translate-1/2 right-0 text-red-600"
+            data-tooltip-target="description-tooltip"
+            [icon]="faCircleExclamation"
+          ></fa-icon>
+          <div
+            id="description-tooltip"
+            class="absolute bg-gray-700 text-white text-xs rounded px-2 py-1 invisible opacity-0 transition-opacity duration-300 bottom-full right-0 mb-2 w-50"
+          >
+            Description must be 20-500 characters long and can only contain
+            letters, numbers, spaces and special characters .,!?&'\"()-
+          </div>
+        </div>
+      </div>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="form.controls['description'].hasError('required') && isSubmited"
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Enter Description
+      </p>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="form.controls['description'].hasError('pattern') && isSubmited"
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Invalid Description
+      </p>
+    </div>
+    <div class="flex flex-col gap-2">
+      <label class="font-medium text-gray-700" for="Location">Location</label>
+      <div
+        class="border-2 border-gray-200 rounded-md relative"
+        [class.invalid]="
+          (form.controls['location'].hasError('required') ||
+            form.controls['location'].hasError('pattern')) &&
+          isSubmited
+        "
+      >
+        <input
+          class="outline-none w-full p-2"
+          type="text"
+          formControlName="location"
+          id="Location"
+        />
+        <div
+          class="tooltip-show absolute right-0 top-1/2 hidden"
+          [class.hide]="
+            (form.controls['location'].hasError('required') ||
+              form.controls['location'].hasError('pattern')) &&
+            isSubmited
+          "
+        >
+          <fa-icon
+            class="absolute top-1/2 -translate-1/2 right-0 text-red-600"
+            data-tooltip-target="location-tooltip"
+            [icon]="faCircleExclamation"
+          ></fa-icon>
+          <div
+            id="location-tooltip"
+            class="absolute bg-gray-700 text-white text-xs rounded px-2 py-1 invisible opacity-0 transition-opacity duration-300 bottom-full right-0 mb-2 w-50"
+          >
+            Location must be 5-100 characters long and can only contain
+            letters, numbers, spaces and special characters .,'-
+          </div>
+        </div>
+      </div>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="form.controls['location'].hasError('required') && isSubmited"
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Enter Location
+      </p>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="form.controls['location'].hasError('pattern') && isSubmited"
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Invalid Location
+      </p>
+    </div>
+    <div class="flex flex-col gap-2">
+      <label class="font-medium text-gray-700" for="Location">Category</label>
+      <div
+        class="border-2 border-gray-200 rounded-md relative"
+        [class.invalid]="
+          form.controls['category'].hasError('required')
+          && isSubmited
+        "
+      >
+        <div class="relative" >
+          <select
+            class="outline-none w-full p-2 appearance-none"
+            formControlName="category"
+            id="Category"
+          >
+            <option value="">Select a category</option>
+            <option *ngFor="let category of musicCategories" [value]="category.value">{{ category.label }}</option>
+          </select>
+          <fa-icon class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none" [icon]="faCaretDown" ></fa-icon>
+        </div>
+      </div>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="form.controls['category'].hasError('required') && isSubmited"
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Enter Categoory
+      </p>
+    </div>
+    <div class="flex flex-col gap-2">
+      <label class="font-medium text-gray-700" for="EventDate"
+        >Event Date</label
+      >
+      <div>
+        <input
+          class="w-full border-2 border-gray-200 p-2 rounded-md outline-0"
+          type="datetime-local"
+          formControlName="eventDateTime"
+          id="EventDate"
+          [class.invalid]="
+            (form.controls['eventDateTime'].hasError('required') ||
+              form.controls['eventDateTime'].hasError('minDate')) &&
+            isSubmited
+          "
+        />
+        <p
+          class="text-sm mt-1 text-red-600"
+          *ngIf="form.controls['eventDateTime'].hasError('required') && isSubmited"
+        >
+          <span
+            ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+          ></span>
+          Enter event date
+        </p>
+        <p
+          class="text-sm mt-1 text-red-600"
+          *ngIf="form.controls['eventDateTime'].hasError('minDate') && isSubmited"
+        >
+          <span
+            ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+          ></span>
+          Event date should be in the future
+        </p>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2 relative">
+      <label class="font-medium text-gray-700" for="PricePerTicket"
+        >Price Per Ticket</label
+      >
+      <div
+        class="border-2 border-gray-200 p-1.5 rounded-md relative"
+        [class.invalid]="
+          (form.controls['price'].hasError('required')
+          || form.controls['price'].hasError('min')
+          || form.controls['price'].hasError('pattern'))
+          && isSubmited
+        "
+      >
+        <fa-icon
+          class="absolute top-1/2 -translate-1/2 left-4"
+          [icon]="faDollarSign"
+        ></fa-icon>
+        <input
+          class="outline-none w-full ps-8"
+          type="number"
+          formControlName="price"
+          id="PricePerTicket"
+        />
+        <div
+          class="tooltip-show absolute right-0 top-1/2 hidden"
+          [class.hide]="
+            (form.controls['price'].hasError('required')
+            || form.controls['price'].hasError('min')
+            || form.controls['price'].hasError('pattern'))
+            && isSubmited
+          "
+        >
+          <fa-icon
+            class="absolute top-1/2 -translate-1/2 right-0 text-red-600"
+            data-tooltip-target="pricePerTicket-tooltip"
+            [icon]="faCircleExclamation"
+          ></fa-icon>
+          <div
+            id="pricePerTicket-tooltip"
+            class="absolute bg-gray-700 text-white text-xs rounded px-2 py-1 invisible opacity-0 transition-opacity duration-300 bottom-full right-0 mb-2 w-50"
+          >
+            Price Per Ticket must be a number between 5.00-9999.99 dollars.
+          </div>
+        </div>
+      </div>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="
+          form.controls['price'].hasError('required')
+          && isSubmited
+        "
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Enter Price Per Ticket
+      </p>
+      <p
+        class="text-sm mt-1 text-red-600"
+        *ngIf="
+          (form.controls['price'].hasError('min')
+          || form.controls['price'].hasError('pattern'))
+          && isSubmited
+        "
+      >
+        <span
+          ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
+        ></span>
+        Invalid Price Per Ticket
+      </p>
+    </div>
+    <div class="flex flex-col gap-2">
+      <label class="font-medium text-gray-700" for="TotalTicketAvailable"
+        >Total Tickets Available</label
+      >
+      <div
+        class="border-2 border-gray-200 p-1.5 rounded-md relative"
+        [class.invalid]="
+          (form.controls['totalTickets'].hasError('required')
+          || form.controls['totalTickets'].hasError('min')
+          || form.controls['totalTickets'].hasError('pattern'))
+          && isSubmited
+        "
+      >
+        <input
+          class="outline-none w-full"
+          type="number"
+          formControlName="totalTickets"
+          id="TotalTicketAvailable"
+        />
+        <div
+          class="tooltip-show absolute right-0 top-1/2 hidden"
+          [class.hide]="
+            (form.controls['totalTickets'].hasError('required')
+            || form.controls['totalTickets'].hasError('min')
+            || form.controls['totalTickets'].hasError('pattern'))
+            && isSubmited
+          "
+        >
+          <fa-icon
+            class="absolute top-1/2 -translate-1/2 right-0 text-red-600"
+            data-tooltip-target="totalTicketAvailable-tooltip"
+            [icon]="faCircleExclamation"
+          ></fa-icon>
+          <div
+            id="totalTicketAvailable-tooltip"
+            class="absolute bg-gray-700 text-white text-xs rounded px-2 py-1 invisible opacity-0 transition-opacity duration-300 bottom-full right-0 mb-2 w-50"
+          >
+            Price Per Ticket must be a number between 5-9999 tickets.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-4">
+      <label class="font-medium text-gray-700" for="image"
+        >Event Image</label
+      >
+      <div
+        class="pl-4"
+        *ngIf="form.controls['image']?.hasError('invalidImage')"
+      >
+        <p class="text-red-600">Event Image should be a valid image.</p>
+      </div>
+      <div
+        class="w-[160px] h-[180px] ml-4 bg-gray-100 flex items-center relative cursor-pointer"
+        *ngIf="fileName !== 'No file chosen'"
+      >
+        <fa-icon
+          class="absolute -top-[15px] -right-[15px] text-3xl text-red-500"
+          [icon]="faCircleXmark"
+          (click)="removeImage()"
+        ></fa-icon>
+        <img
+          class="w-full max-h-[100px] bg-cover bg-center"
+          [src]="fileName"
+          alt="event_image"
+        />
+      </div>
+      <div class="flex gap-4 items-center pl-4">
+        <label
+          class="bg-blue-100 py-1 px-3 rounded-2xl"
+          for="image"
+          *ngIf="fileName === 'No file chosen'"
+        >
+          <span class="file-button cursor-pointer">Choose File</span>
+        </label>
+        <span class="mr-2 text-gray-500" id="file-text">{{
+          fileName === "No file chosen"
+            ? fileName
+            : this.form.controls["image"].value.name
+        }}</span>
+      </div>
+      <input
+        class="hidden"
+        type="file"
+        id="image"
+        (change)="onFileChange($event)"
+        #fileInput
+      />
+      <input type="hidden" formControlName="image" id="image" />
+    </div>
+    <button
+      class="p-3 rounded-xl font-semibold text-gray-100 bg-gradient-to-r from-blue-500 to-blue-800 cursor-pointer"
+      type="submit"
+      [disabled]="isLoading"
+    >
+      <ng-container *ngIf="!isLoading; else loading" >
+        Create Event
+      </ng-container>
+      <ng-template #loading >
+        <fa-icon
+          class="animate-spin"
+          [icon]="faSpinner"
+          *ngIf="isLoading"
+      ></fa-icon>
+      </ng-template>
+    </button>
+  </form>
+</div>
+
+<ng-template #fetchingEvent >
+  <div class="h-[1200px] flex items-center justify-center" >
+    <fa-icon class="animate-spin text-2xl text-gray-500" [icon]="faSpinner" ></fa-icon>
+  </div>
+</ng-template>

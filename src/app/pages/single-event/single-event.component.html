@@ -1,0 +1,182 @@
+<ng-container *ngIf="!isLoading; else loading" >
+  <div
+    class="max-w-[1440px] m-auto bg-white rounded-lg mb-8 shadow-xl" 
+    *ngIf="user$ | async as user"
+  >
+    <img
+      class="h-[50%] max-h-[600px] w-[100%] rounded-t-2xl bg-cover mt-10"
+      [src]="imageUrl + data.imageUrl"
+      alt=""
+    />
+    <div class="flex lg:flex-row flex-col">
+      <div class="flex flex-1/2 flex-col p-10">
+        <h1 class="font-bold text-4xl pb-4">{{ data.name }}</h1>
+        <p class="text-lg font-normal text-gray-800">
+          {{ data.description }}
+        </p>
+        <div class="grid grid-cols-2 gap-5 my-6">
+          <div class="flex flex-col px-5 py-6 rounded-2xl bg-gray-50">
+            <div class="flex flex-row gap-2">
+              <fa-icon class="text-blue-500" [icon]="faCalendarDays"></fa-icon>
+              <p>Date</p>
+            </div>
+            <p>{{ data.eventDateTime | date : "dd/MM/yyyy" }}</p>
+          </div>
+          <div class="flex flex-col px-5 py-6 rounded-2xl bg-gray-50">
+            <div class="flex flex-row gap-2">
+              <fa-icon class="text-blue-500" [icon]="faLocationDot"></fa-icon>
+              <p>Location</p>
+            </div>
+            <p>{{ data.location }}</p>
+          </div>
+          <div class="flex flex-col px-5 py-6 rounded-2xl bg-gray-50">
+            <div class="flex flex-row gap-2">
+              <fa-icon class="text-blue-500" [icon]="faTicket"></fa-icon>
+              <p>Price</p>
+            </div>
+            <p>${{ data.price }}</p>
+          </div>
+          <div class="flex flex-col px-5 py-6 rounded-2xl bg-gray-50">
+            <div class="flex flex-row gap-2">
+              <fa-icon class="text-blue-500" [icon]="faUserGroup"></fa-icon>
+              <p>Availability</p>
+            </div>
+            <p>{{ data.availableTickets }} / {{ data.totalTickets }} left</p>
+          </div>
+        </div>
+        <div class="flex flex-col bg-blue-50 rounded-2xl py-8 px-5 text-blue-800">
+          <h2 class="text-2xl font-bold">Event Information</h2>
+          <div class="flex flex-col my-2 gap-2">
+            <p>&bull; Please arrive 30 minutes before the event starts</p>
+            <p>&bull; Ticket are not-refundable</p>
+            <p>&bull; Age restriction: 18+</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-1/2 flex-col p-10">
+        <div
+          class="rounded-xl shadow-lg h-auto"
+        >
+          <img
+            class="h-60 w-[100%] rounded-t-xl object-cover"
+            [src]="imageUrl + data.imageUrl"
+            alt="sorry"
+          />
+          <div class="px-10 p-6">
+            <div
+              class="flex justify-between items-start"
+              *ngIf="data.user.id === user.id; else notOwner"
+            >
+              <div
+                class="flex flex-col gap-2"
+  
+              >
+                <div
+                  class="flex bg-blue-600 text-white rounded-2xl items-center justify-center py-1 px-3 gap-1"
+                  *ngIf="data.user.id === user.id"
+                >
+                  <fa-icon [icon]="faCalendarDays" class="text-sm"></fa-icon>
+                  <p class="text-sm">Your Event</p>
+                </div>
+                <h1 class="text-3xl font-bold w-[70%] capitalize">
+                  {{ data.name }}
+                </h1>
+              </div>
+              <p
+                class="text-lg font-bold text-green-700 bg-green-50 p-[5px] rounded-lg"
+              >
+                ${{ data.price }}
+              </p>
+            </div>
+            <ng-template #notOwner>
+              <div class="flex justify-between items-start">
+                <h1 class="text-3xl font-bold w-[70%] capitalize">
+                  {{ data.name }}
+                </h1>
+                <p
+                  class="text-lg font-bold text-green-700 bg-green-50 p-[5px] rounded-lg"
+                >
+                  ${{ data.price }}
+                </p>
+              </div>
+            </ng-template>
+            <div class="flex flex-col leading-10 py-2">
+              <div class="flex gap-3 items-center">
+                <fa-icon [icon]="faLocationDot" class="text-gray-500"></fa-icon>
+                <p class="text-lg text-gray-500 font-medium">
+                  {{ data.location }}
+                </p>
+              </div>
+              <div class="flex gap-3 items-center">
+                <fa-icon [icon]="faCalendarDays" class="text-gray-500"></fa-icon>
+                <p class="text-lg text-gray-500 font-medium">
+                  {{ data.eventDateTime | date : "dd/MM/yyyy" }}
+                </p>
+              </div>
+              <div class="flex gap-3 items-center">
+                <fa-icon [icon]="faTicket" class="text-gray-500"></fa-icon>
+                <p class="text-lg text-gray-500 font-medium">
+                  {{ data.availableTickets }} / {{ data.totalTickets }} available &nbsp;
+                  <span class="text-sm text-yellow-600" >(1 person trying to buy)</span>
+                </p>
+              </div>
+            </div>
+            <p class="text-gray-500" *ngIf="data.description.length > 80">
+              {{ data.description.slice(0, 80) }}...
+            </p>
+            <p class="text-gray-500" *ngIf="data.description.length <= 80">
+              {{ data.description }}
+            </p>
+            <button
+              class="flex gap-2 bg-gray-100 w-[100%] items-center justify-center py-5 rounded-2xl mt-6 cursor-pointer"
+              *ngIf="data.user.id === user.id"
+            >
+              <fa-icon
+                [icon]="faCalendarDays"
+                class="text-gray-700 font-bold"
+              ></fa-icon>
+              <p (click)="updateEvent()" class="text-gray-700 font-bold">Edit Event</p>
+            </button>
+            <!-- <div class="flex flex-col w-full shadow-lg m-4 border-2 border-orange-100 rounded-2xl mx-auto" >
+              <div class="flex flex-col border-2 border-gray-100 rounded-md p-5 m-6 gap-4" >
+                <div class="flex items-center gap-4" >
+                  <div class="flex items-center justify-center bg-yellow-100 p-4 rounded-full w-14 h-14" >
+                    <fa-icon class="text-orange-400" [icon]="faTicket" ></fa-icon>
+                  </div>
+                  <div class="" >
+                    <h2 class="font-bold text-xl" >Ticket Reserved</h2>
+                    <p class="text-gray-500" >Expires in 29 minutes 57 seconds</p>
+                  </div>
+                </div>
+                <p class="text-gray-500" >
+                  A ticket has been reserved for you. Complete your purchase
+                  before the time expires to secure your spot at this event.
+                </p>
+              </div>
+              <button class="flex items-center justify-center mx-5 p-4 text-white gap-1 rounded-lg bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-600 cursor-pointer" >
+                <p class="font-bold text-lg" >Purchase Your Ticket Now</p>
+                <fa-icon [icon]="faArrowRightLong" ></fa-icon>
+              </button>
+              <button class="flex items-center justify-center mx-5 p-2 rounded-lg bg-pink-100 gap-2 text-red-700 my-5 cursor-pointer" >
+                <fa-icon class="text-red-700" [icon]="faCircleXmark" ></fa-icon>
+                <p class="font-medium text-lg" >Release Ticket Offer</p>
+              </button>
+            </div> -->
+          </div>
+        </div>
+        <button class="w-full text-center bg-blue-600 mt-5 py-4 text-white font-semibold rounded-lg" *ngIf="data.user.id !== user.id; else yourTicket" >Buy Ticket</button>
+        <ng-template #yourTicket>
+          <div class="flex gap-2 bg-gray-100 w-[100%] items-center justify-center py-3 rounded-2xl mt-6" >
+            <fa-icon class="text-gray-700 font-bold" [icon]="faCircleXmark" ></fa-icon>
+            <p class="text-gray-700 font-bold" >You cannot buy a ticket for your own event</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #loading >
+  <div class="h-screen" >
+    <fa-icon class="animate-spin" [icon]="faSpinner" ></fa-icon>
+  </div>
+</ng-template>

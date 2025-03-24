@@ -1,1 +1,9 @@
+<app-navbar (showModal)="showModal = $event" ></app-navbar>
+
+<div *ngIf="isLoading" class="loading-spinner" >
+  <div class="spinner" ></div>
+</div>
+
 <router-outlet></router-outlet>
+
+<app-auth (showModal)="showModal = $event" *ngIf="showModal" ></app-auth>

@@ -1,0 +1,22 @@
+<div class="max-w-[900px] h-200 m-auto mt-8 pb-2 rounded-lg bg-white shadow-xl" >
+  <form (ngSubmit)="onSubmit(5000)"> <!-- Amount in cents (e.g., $50.00) -->
+    <!-- Card Number -->
+    <div id="card-number">
+      <!-- Stripe's card number input element will be mounted here -->
+    </div>
+
+    <!-- Expiration Date -->
+    <div id="card-expiry">
+      <!-- Stripe's expiration date input element will be mounted here -->
+    </div>
+
+    <!-- CVC -->
+    <div id="card-cvc">
+      <!-- Stripe's CVC input element will be mounted here -->
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit">Pay</button>
+  </form>
+</div>
+

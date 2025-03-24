@@ -1,0 +1,65 @@
+<div class="hidden h-[90px] bg-gray-50 shadow-md items-center justify-between lg:flex sticky top-0 z-1" >
+  <div class="lg:flex ml-5 gap-5" >
+    <img
+      class="h-8 m-auto cursor-pointer"
+      src="logo.png"
+      alt="ticket logo"
+      [routerLink]="'/events'"
+    >
+    <div class="w-2xl shadow-md border-[1px] border-gray-200 flex rounded-[10px] py-2" >
+        <fa-icon class="w-14 text-gray-400 flex items-center justify-center" [icon]="faMagnifyingGlass" ></fa-icon>
+        <input class="w-[100%]" type="text" placeholder="Search for events...">
+        <button class="bg-blue-600 text-white border-blue-700 rounded-[6px] px-4 py-2 mr-2" >Search</button>
+    </div>
+  </div>
+  <div class="lg:flex justify-between mr-5 gap-3 items-center" *ngIf="user$ | async as user" >
+    <!-- IF THE USER IS AUTHENTICATED -->
+    <ng-container *ngIf="user.id; else notAuthenticated" >
+      <button class="bg-blue-600 text-white border-2 border-blue-700 rounded-[6px] px-4 py-2" >Sell Tickets</button>
+      <button class="bg-gray-200 text-black border-2 border-gray-300 rounded-[6px] px-4 py-2" >My Tickets</button>
+      <img class="h-9 rounded-[100%] w-9" src="profile.jpg" alt="">
+    </ng-container>
+    <!-- IF THE USER IS NOT AUTHENTICATED -->
+    <ng-template #notAuthenticated >
+      <button
+        class="bg-gray-200 text-black border-2 border-gray-300 rounded-[6px] px-4 py-2 cursor-pointer"
+        (click)="showHideModal()"
+      >
+        Sign In
+      </button>
+    </ng-template>
+  </div>
+</div>
+
+<div class="flex flex-col bg-gray-50 shadow-md items-center justify-between p-5 lg:hidden" >
+  <div class="lg:hidden flex mx-5 items-center justify-between w-full" *ngIf="user$ | async as user" >
+    <img
+      class="h-8"
+      src="logo.png"
+      alt="ticket logo"
+      [routerLink]="'/events'"
+    >
+    <ng-container *ngIf="user.id; else notAuthenticated" >
+      <img class=" w-9 h-9 rounded-[100%]" src="profile.jpg" alt="">
+    </ng-container>
+    <ng-template #notAuthenticated >
+      <button
+        class="bg-gray-200 text-black border-2 border-gray-300 rounded-[6px] px-4 py-2 cursor-pointer"
+        (click)="showHideModal()"
+      >
+        Sign In
+      </button>
+    </ng-template>
+  </div>
+  <div class="w-full shadow-md border-[1px] border-gray-200 flex rounded-[10px] py-2 my-6" >
+    <fa-icon class="w-14 text-gray-400 flex items-center justify-center" [icon]="faMagnifyingGlass" ></fa-icon>
+    <input class="w-[100%]" type="text" placeholder="Search for events...">
+    <button class="bg-blue-600 text-white border-blue-700 rounded-[6px] px-4 py-2 mr-2" >Search</button>
+  </div>
+  <ng-container *ngIf="user$ | async as user" >
+    <div class="w-full flex gap-4" *ngIf="user.id" >
+      <button class="w-1/2 bg-blue-600 text-white border-2 border-blue-700 rounded-[6px] px-4 py-2" >Sell Tickets</button>
+      <button class="w-1/2 bg-gray-200 text-black border-2 border-gray-300 rounded-[6px] px-4 py-2" >My Tickets</button>
+    </div>
+  </ng-container>
+</div>

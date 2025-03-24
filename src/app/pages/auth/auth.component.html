@@ -1,0 +1,9 @@
+<div class="fixed inset-0 flex justify-center items-center z-50" *ngIf="showModal" >
+  <div class="absolute w-full h-full opacity-50 bg-black z-51" (click)="hideModal()" ></div>
+  <div class="w-full h-full absolute flex items-center justify-center" *ngIf="currentTab === 'signin'; else signUpComp" >
+    <app-sign-in (tabChange)="currentTab = $event" (hideModal)="hideModal()" ></app-sign-in>
+  </div>
+  <ng-template #signUpComp >
+    <app-sign-up (tabChange)="currentTab = $event" ></app-sign-up>
+  </ng-template>
+</div>

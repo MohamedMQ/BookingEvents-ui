@@ -1,0 +1,93 @@
+<div class="max-w-[1440px] m-auto p-8">
+  <div
+    class="flex bg-white shadow-sm border-2 border-gray-100 rounded-xl p-8 items-center justify-between"
+  >
+    <div class="flex items-center gap-6">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+      <div class="flex flex-col gap-1">
+        <h1 class="font-bold text-3xl">My Events</h1>
+        <p class="text-xl text-gray-500">
+          Manage your event listings and track sales
+        </p>
+      </div>
+    </div>
+    <div
+      class="flex items-center gap-4 bg-blue-700 text-white h-full py-3 px-5 rounded-xl"
+    >
+      <fa-icon class="text-xl" [icon]="faPlus"></fa-icon>
+      <p class="font-semibold text-lg">Create Event</p>
+    </div>
+  </div>
+  <div class="bg-white p-8 my-10 rounded-xl shadow-sm border-2 border-gray-100">
+    <h1 class="text-3xl font-bold">Upcoming Events</h1>
+    <div class="flex p-8 gap-8 border-2 border-gray-100 rounded-xl shadow-sm mt-8" *ngFor="let item of data | paginate : { itemsPerPage: itemsPerPage, currentPage: page }">
+      <div class="flex-1/5 rounded-lg">
+        <img
+          class="rounded-lg"
+          src="https://loremflickr.com/cache/resized/defaultImage.small_1000_600_nofilter.jpg"
+          alt=""
+        />
+      </div>
+      <div class="flex-4/5">
+        <div class="flex flex-col">
+          <div class="flex justify-between" >
+            <div class="flex flex-col" >
+              <h2 class="font-bold text-2xl" >{{ item.name }}</h2>
+              <p class="text-gray-500" >
+                {{ item.description }}
+              </p>
+            </div>
+            <div class="flex items-start justify-start gap-2" >
+              <button class="flex gap-2 font-medium text-gray-500 bg-gray-100 h-fit px-4 py-2 rounded-xl" >
+                <fa-icon [icon]="faPenToSquare" ></fa-icon>
+                <p>Edit</p>
+              </button>
+              <button class="flex items-center gap-2 font-medium text-red-600 h-fit px-4 py-2" >
+                <fa-icon [icon]="faBan" ></fa-icon>
+                <p>Cancel
+                </p>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-4 mt-4 gap-4" >
+            <div class="bg-gray-100 p-3 rounded-xl flex flex-col gap-2" >
+              <div class="flex gap-2" >
+                <fa-icon class="text-orange-400" [icon]="faTicket" ></fa-icon>
+                <p>Tickets Sold</p>
+              </div>
+              <p><span class="text-3xl font-semibold" >{{ item.availableTickets }}</span>/{{ item.totalTickets }}</p>
+            </div>
+            <div class="bg-gray-100 p-3 rounded-xl  flex flex-col gap-2" >
+              <div class="flex gap-2" >
+                <fa-icon class="text-orange-400" [icon]="faMoneyBill1" ></fa-icon>
+                <p>Revenue</p> <!-- I SHOULD CALCULATE THE SOME (NOT DONE YET) -->
+              </div>
+              <p class="text-3xl font-semibold" >$0</p>
+            </div>
+            <div class="bg-gray-100 p-3 rounded-xl  flex flex-col gap-2" >
+              <div class="flex gap-2" >
+                <fa-icon class="text-orange-400" [icon]="faCalendarDays" ></fa-icon>
+                <p>Date</p>
+              </div>
+              <p class="font-medium" >{{ item.eventDateTime | date: "dd/MM/yyyy hh:mm a" : "UTC" }}</p>
+            </div>
+            <div class="bg-gray-100 p-3 rounded-xl  flex flex-col gap-2" >
+              <div class="flex gap-2" >
+                <fa-icon class="text-orange-400" [icon]="faCircleInfo" ></fa-icon>
+                <p>Status</p>
+              </div>
+              <p class="font-medium" *ngIf="!isBefore(item)" >Active</p>
+              <p class="font-medium" *ngIf="isBefore(item)" >InActive</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center justify-center py-14">
+    <pagination-controls
+      class="my-pagination"
+      (pageChange)="page = $event"
+    ></pagination-controls>
+  </div>
+</div>
