@@ -1,6 +1,6 @@
-<ng-container *ngIf="!isLoading; else loading" >
+<ng-container *ngIf="!isLoading; else loading">
   <div
-    class="max-w-[1440px] m-auto bg-white rounded-lg mb-8 shadow-xl" 
+    class="max-w-[1440px] m-auto bg-white rounded-lg mb-8 shadow-xl"
     *ngIf="user$ | async as user"
   >
     <img
@@ -44,7 +44,9 @@
             <p>{{ data.availableTickets }} / {{ data.totalTickets }} left</p>
           </div>
         </div>
-        <div class="flex flex-col bg-blue-50 rounded-2xl py-8 px-5 text-blue-800">
+        <div
+          class="flex flex-col bg-blue-50 rounded-2xl py-8 px-5 text-blue-800"
+        >
           <h2 class="text-2xl font-bold">Event Information</h2>
           <div class="flex flex-col my-2 gap-2">
             <p>&bull; Please arrive 30 minutes before the event starts</p>
@@ -54,9 +56,7 @@
         </div>
       </div>
       <div class="flex flex-1/2 flex-col p-10">
-        <div
-          class="rounded-xl shadow-lg h-auto"
-        >
+        <div class="rounded-xl shadow-lg h-auto">
           <img
             class="h-60 w-[100%] rounded-t-xl object-cover"
             [src]="imageUrl + data.imageUrl"
@@ -67,10 +67,7 @@
               class="flex justify-between items-start"
               *ngIf="data.user.id === user.id; else notOwner"
             >
-              <div
-                class="flex flex-col gap-2"
-  
-              >
+              <div class="flex flex-col gap-2">
                 <div
                   class="flex bg-blue-600 text-white rounded-2xl items-center justify-center py-1 px-3 gap-1"
                   *ngIf="data.user.id === user.id"
@@ -108,7 +105,10 @@
                 </p>
               </div>
               <div class="flex gap-3 items-center">
-                <fa-icon [icon]="faCalendarDays" class="text-gray-500"></fa-icon>
+                <fa-icon
+                  [icon]="faCalendarDays"
+                  class="text-gray-500"
+                ></fa-icon>
                 <p class="text-lg text-gray-500 font-medium">
                   {{ data.eventDateTime | date : "dd/MM/yyyy" }}
                 </p>
@@ -116,8 +116,16 @@
               <div class="flex gap-3 items-center">
                 <fa-icon [icon]="faTicket" class="text-gray-500"></fa-icon>
                 <p class="text-lg text-gray-500 font-medium">
-                  {{ data.availableTickets }} / {{ data.totalTickets }} available &nbsp;
-                  <span class="text-sm text-yellow-600" >(1 person trying to buy)</span>
+                  {{ data.availableTickets }} /
+                  {{ data.totalTickets }} available &nbsp;
+                  <span
+                    class="text-sm text-yellow-600"
+                    *ngIf=""
+                  >
+                    <!-- (this.data.tickets.length && this.data.tickets[0].queueNum !== -1) -->
+                    (1 person trying to buy)
+                  </span
+                  >
                 </p>
               </div>
             </div>
@@ -129,15 +137,20 @@
             </p>
             <button
               class="flex gap-2 bg-gray-100 w-[100%] items-center justify-center py-5 rounded-2xl mt-6 cursor-pointer"
-              *ngIf="data.user.id === user.id"
+              *ngIf="(user.id && data.user.id === user.id)"
             >
               <fa-icon
                 [icon]="faCalendarDays"
                 class="text-gray-700 font-bold"
               ></fa-icon>
-              <p (click)="updateEvent()" class="text-gray-700 font-bold">Edit Event</p>
+              <p (click)="updateEvent()" class="text-gray-700 font-bold">
+                Edit Event
+              </p>
             </button>
-            <!-- <div class="flex flex-col w-full shadow-lg m-4 border-2 border-orange-100 rounded-2xl mx-auto" >
+            <div
+              class="flex flex-col w-full shadow-lg m-4 border-2 border-orange-100 rounded-2xl mx-auto"
+              *ngIf="(user.id && data.user.id !== user.id && data.tickets.length && data.tickets[0].status === 'PENDING')" 
+            >
               <div class="flex flex-col border-2 border-gray-100 rounded-md p-5 m-6 gap-4" >
                 <div class="flex items-center gap-4" >
                   <div class="flex items-center justify-center bg-yellow-100 p-4 rounded-full w-14 h-14" >
@@ -145,7 +158,7 @@
                   </div>
                   <div class="" >
                     <h2 class="font-bold text-xl" >Ticket Reserved</h2>
-                    <p class="text-gray-500" >Expires in 29 minutes 57 seconds</p>
+                    <p class="text-gray-500" >Expires in 9 minutes 57 seconds</p>
                   </div>
                 </div>
                 <p class="text-gray-500" >
@@ -159,24 +172,41 @@
               </button>
               <button class="flex items-center justify-center mx-5 p-2 rounded-lg bg-pink-100 gap-2 text-red-700 my-5 cursor-pointer" >
                 <fa-icon class="text-red-700" [icon]="faCircleXmark" ></fa-icon>
-                <p class="font-medium text-lg" >Release Ticket Offer</p>
+                <p
+                  class="font-medium text-lg"
+                  (click)="cancelTicket()"
+                >
+                  Release Ticket Offer
+                </p>
               </button>
-            </div> -->
+            </div>
           </div>
         </div>
-        <button class="w-full text-center bg-blue-600 mt-5 py-4 text-white font-semibold rounded-lg" *ngIf="data.user.id !== user.id; else yourTicket" >Buy Ticket</button>
-        <ng-template #yourTicket>
-          <div class="flex gap-2 bg-gray-100 w-[100%] items-center justify-center py-3 rounded-2xl mt-6" >
-            <fa-icon class="text-gray-700 font-bold" [icon]="faCircleXmark" ></fa-icon>
-            <p class="text-gray-700 font-bold" >You cannot buy a ticket for your own event</p>
-          </div>
-        </ng-template>
+        <button
+          class="w-full text-center bg-blue-600 mt-5 py-4 text-white font-semibold rounded-lg cursor-pointer"
+          (click)="bookNewTicket()"
+          *ngIf="(user.id && data.user.id !== user.id && !data.tickets.length)"
+        >
+          Buy Ticket
+        </button>
+        <div
+          class="flex gap-2 bg-gray-100 w-[100%] items-center justify-center py-3 rounded-2xl mt-6"
+          *ngIf="(user.id && data.user.id === user.id)"
+        >
+          <fa-icon
+            class="text-gray-700 font-bold"
+            [icon]="faCircleXmark"
+          ></fa-icon>
+          <p class="text-gray-700 font-bold">
+            You cannot buy a ticket for your own event
+          </p>
+        </div>
       </div>
     </div>
   </div>
 </ng-container>
-<ng-template #loading >
-  <div class="h-screen" >
-    <fa-icon class="animate-spin" [icon]="faSpinner" ></fa-icon>
+<ng-template #loading>
+  <div class="h-screen">
+    <fa-icon class="animate-spin" [icon]="faSpinner"></fa-icon>
   </div>
 </ng-template>

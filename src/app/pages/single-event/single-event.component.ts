@@ -11,6 +11,7 @@ import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../../core/services/auth.service';
 import { userAction } from '../../store/actions/user.action';
+import { TicketService } from '../../core/services/ticket.service';
 // import { NgxPaginationModule } from 'ngx-pagination'
 
 @Component({
@@ -35,70 +36,122 @@ export class SingleEventComponent implements OnInit {
   private eventId: number = 0;
   data: any = [];
   isLoading: boolean = true;
+  isPosting: boolean = false;
+  isCanceling: boolean = true;
+  queuePos: number = -1;
   imageUrl = environment.imageBaseUrl;
 
-  private eventService = inject(EventService);
   private authService = inject(AuthService);
+  private eventService = inject(EventService);
+  private ticketService = inject(TicketService);
   private store = inject(Store);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-
   user$ = this.store.select(selectUserFeature);
 
-  fetchEvent() {
+  fetchEvent(isUserExists: boolean) {
     this.route
       .paramMap
       .subscribe(params => {
-        let paramStr: string | any = params.get('eventId');
-        this.eventId = (!isNaN(Number(paramStr)) && Number(paramStr) > 0) ? Number(paramStr) : 0;
-        if (!this.eventId)
-          this.router.navigate(['/errorPage']);
-        this.eventService
-        .publicEvent(this.eventId)
-        .pipe(
-          finalize(() => {
-            this.isLoading = false;
+        let paramStr: string | null = params.get('eventId');
+        this.eventId = Number(paramStr);
+        if (isUserExists) 
+          this.eventService
+          .protectedEvent(this.eventId)
+          .pipe(
+            finalize(() => {
+              this.isLoading = false;
+            })
+          )
+          .subscribe({
+            next: (res) => {
+              console.log(res)
+              this.data = res.data;
+            },
+            error: (err) => {
+              console.log(err);
+              this.router.navigate(['/errorPage']);
+            }
           })
-        )
-        .subscribe({
-          next: (res) => {
-            console.log(res)
-            this.data = res.data;
-          },
-          error: (err) => {
-            console.log(err);
-          }
-        })
+        else
+          this.eventService
+            .publicEvent(this.eventId)
+            .pipe(
+              finalize(() => {
+                this.isLoading = false;
+              })
+            )
+            .subscribe({
+              next: (res) => {
+                console.log(res)
+                this.data = res.data;
+              },
+              error: (err) => {
+                console.log(err);
+                this.router.navigate(['/errorPage']);
+              }
+          })
       })
   }
 
   ngOnInit(): void {
     this.user$.subscribe((user) => {
       if (!user.id)
-        this.authService
-          .protectedProfile()
-          .pipe(
-            finalize(() => {
-              this.fetchEvent();
-            })
-          )
-          .subscribe({
-            next: (res) => {
-              let { id, name, email } = res.data;
-              const user = { id, name, email }
-              this.store.dispatch(userAction({ user }));
-            },
-            error: (err) => {
-              console.log(err);
-            }
-          })
+        this.fetchEvent(false);
       else
-          this.fetchEvent();
+        this.fetchEvent(true);
     })
   }
 
   updateEvent() {
     this.router.navigate([`/events/update/${this.data.id}`]);
+  }
+
+  bookNewTicket() {
+    const dataToSend = { eventId: this.data.id };
+    this.isPosting = true;
+    this.ticketService
+      .protectedTicket(dataToSend)
+      .pipe(
+        finalize(() => {
+          this.isPosting = false;
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          if (res.message === "Ticket added successfully.")
+            this.data.tickets.push(res.data);
+          else {
+            this.data.tickets[0].queueNum = res.data.queuePos;
+            this.queuePos = this.data.queuePos;
+          }
+        },
+        error: (err) => {
+
+        }
+      })
+  }
+
+  cancelTicket() {
+    const ticketId = this.data.tickets[0].id;
+    this.isCanceling = true;
+    this.ticketService
+      .protectedTicket(ticketId)
+      .pipe(
+        finalize(() => {
+          this.isCanceling = false;
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          console.log("RESULT IS : ", res);
+          this.data.tickets = [];
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
   }
 }

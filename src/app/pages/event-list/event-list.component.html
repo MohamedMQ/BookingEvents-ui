@@ -36,7 +36,7 @@
         <div class="px-10 p-6">
           <div
             class="flex justify-between items-start"
-            *ngIf="item.user.id === user.id; else notOwner"
+            *ngIf="item.user?.id === user.id; else notOwner"
           >
             <div class="flex flex-col gap-2">
               <div
@@ -95,7 +95,7 @@
           </p>
           <button
             class="flex gap-2 bg-gray-200 w-[100%] items-center justify-center py-5 rounded-2xl mt-6 cursor-pointer"
-            *ngIf="item.user.id === user.id"
+            *ngIf="item.user?.id === user.id"
           >
             <fa-icon
               [icon]="faPencil"
@@ -106,7 +106,7 @@
 
           <div
             class="flex flex-col w-full shadow-lg m-4 border-2 border-orange-100 rounded-2xl mx-auto"
-            *ngIf="item.tickets.length && item.tickets[0].status === 'PENDING'"
+            *ngIf="item.tickets?.length && item.tickets[0].status === 'PENDING'"
           >
             <div
               class="flex flex-col border-2 border-gray-100 rounded-md p-5 m-6 gap-4"

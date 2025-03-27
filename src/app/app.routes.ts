@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { eventGuard } from './core/guards/event.guard';
+import { publicAuthGuard } from './core/guards/public-auth.guard';
 
 export const routes: Routes = [
     {
@@ -10,7 +12,7 @@ export const routes: Routes = [
     {
       path: 'events',
       loadComponent: () => import('./pages/event-list/event-list.component').then(m => m.EventListComponent),
-      // canMatch: [authGuard]
+      canMatch: [publicAuthGuard]
     },
     {
       path: 'events/create',
@@ -20,7 +22,7 @@ export const routes: Routes = [
     {
       path: 'events/update/:eventId',
       loadComponent: () => import('./pages/update-event/update-event.component').then(m => m.UpdateEventComponent),
-      canMatch: [authGuard]
+      canMatch: [authGuard, eventGuard]
     },
     {
       path: 'events/my-events',
@@ -35,7 +37,7 @@ export const routes: Routes = [
     {
       path: 'events/:eventId',
       loadComponent: () => import('./pages/single-event/single-event.component').then(m => m.SingleEventComponent),
-      // canMatch: [authGuard]
+      canMatch: [publicAuthGuard, eventGuard]
     },
     {
       path: 'dashboard',

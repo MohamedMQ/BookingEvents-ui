@@ -51,6 +51,7 @@ export class EventFormComponent implements OnInit {
   @Input() type!: string;
   @Input() eventId: any;
   
+  notUpdated = false;
   isSubmited = false;
   start: boolean = false;
   isLoading: boolean = false;
@@ -80,14 +81,13 @@ export class EventFormComponent implements OnInit {
       this.activatedRoute
         .paramMap
         .subscribe(params => {
-          this.eventId = params.get('eventId');
-          if (isNaN(this.eventId) || this.eventId <= 0) this.router.navigate(['/error']);
+          this.eventId = Number(params.get('eventId'));
           this.userId$.subscribe((userId) => {
             this.eventService
               .protectedEvent(this.eventId)
               .subscribe({
                 next: (res) => {
-                  console.log("00000000000000000--------------", res);
+                  console.log("update ", res);
                   this.form.controls['name'].setValue(res.data.name);
                   this.form.controls['description'].setValue(res.data.description);
                   this.form.controls['location'].setValue(res.data.location);
@@ -179,7 +179,10 @@ export class EventFormComponent implements OnInit {
       [Validators.required],
     ],
     eventDateTime: [
-      '',
+      {
+        value: '',
+        disabled: false
+      },
       [
         Validators.required,
         this.minDateValidator
@@ -197,7 +200,7 @@ export class EventFormComponent implements OnInit {
       5,
       [
         Validators.required,
-        Validators.min(5),
+        Validators.min(1), // SHOULD BE 5
         Validators.pattern(/^\d{1,4}$/)
       ],
     ],

@@ -6,8 +6,6 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EventService {
-  // private eventUrl = '/events'
-
   private apiService = inject(ApiService);
 
   publicEvents(newPage: number = 0): Observable<any> {
@@ -22,12 +20,9 @@ export class EventService {
     return this.apiService.get<any>(`/protected/events?page=${newPage}`);
   }
 
-  protectedEvent(eventIdOrformData: any): Observable<any> {
-    console.log("TYPE OF EVENTIDORFORMDATA ======> ", typeof eventIdOrformData === 'string');
-    
-    if (typeof eventIdOrformData === 'string')
+  protectedEvent(eventIdOrformData: any): Observable<any> {    
+    if (typeof eventIdOrformData === 'number')
       return this.apiService.get<any>(`/protected/events/${eventIdOrformData}`);
-    // else
     return this.apiService.post<any>(`/protected/events`, eventIdOrformData);
   }
 

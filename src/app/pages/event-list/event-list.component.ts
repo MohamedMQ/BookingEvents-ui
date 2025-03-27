@@ -64,7 +64,7 @@ export class EventListComponent implements OnInit {
             })
           ).subscribe({
             next: (response) => {
-              console.log(response);
+              console.log(response, user);
               firstLoad ?
                 this.page = response.pagination.currentPage :
                 this.page = response.pagination.currentPage + 1;
@@ -101,28 +101,7 @@ export class EventListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user$.subscribe((user) => {
-      if (!user.id)
-        this.authService
-          .protectedProfile()
-          .pipe(
-            finalize(() => {
-              this.loadEvents(this.page, true);
-            })
-          )
-          .subscribe({
-            next: (res) => {
-              let { id, name, email } = res.data;
-              const user = { id, name, email }
-              this.store.dispatch(userAction({ user }));
-            },
-            error: (err) => {
-              console.log(err);
-            }
-          })
-      else
-        this.loadEvents(this.page, true);
-    })
+    this.loadEvents(this.page, true);
   }
 
   loadMoreEvents(newPage: number) {
