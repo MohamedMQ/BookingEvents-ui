@@ -7,11 +7,17 @@
     <h2 class="font-bold text-3xl" >Sell tickets for your events</h2>
     <p class="text-gray-500 text-lg font-semibold" >List your tickets for sale and manage your listings</p>
     <div class="flex rounded-lg drop-shadow-sm border-1 border-gray-200 items-center justify-center py-4 gap-4 mb-8" >
-      <button class="flex bg-blue-700 text-gray-100 font-semibold gap-3 text-lg px-5 py-3 rounded-lg cursor-pointer" >
+      <button
+        class="flex bg-blue-700 text-gray-100 font-semibold gap-3 text-lg px-5 py-3 rounded-lg cursor-pointer"
+        (click)="goToCreateEvent()"
+      >
         <fa-icon [icon]="faPlus" ></fa-icon>
         <p>Create Event</p>
       </button>
-      <button class="flex bg-gray-100 text-gray-500 font-semibold gap-3 text-lg px-5 py-3 rounded-lg cursor-pointer" >
+      <button
+        class="flex bg-gray-100 text-gray-500 font-semibold gap-3 text-lg px-5 py-3 rounded-lg cursor-pointer"
+        (click)="goToMyEvents()"
+      >
         <fa-icon [icon]="faCalendarDays" ></fa-icon>
         <p>View My Events</p>
       </button>
@@ -43,13 +49,26 @@
     <h2 class="font-semibold" >Required Information</h2>
     <p class="text-xl font-semibold" >Eventually Needed:</p>
     <p class="font-medium px-4" >&bull;&nbsp; individual verification document</p>
-    <button class="bg-yellow-600 text-gray-50 text-xl w-fit px-4 py-3 rounded-xl cursor-pointer" >Complete Requirements</button>
+    <button
+      class="bg-yellow-600 text-gray-50 text-xl w-fit px-4 py-3 rounded-xl cursor-pointer"
+    
+    >
+      Complete Requirements
+    </button>
   </div>
   <div class="mx-8 m-auto flex gap-3" >
-    <button class="flex items-center gap-3 bg-blue-700 text-gray-50 px-6 py-3 rounded-xl text-xl cursor-pointer" >
+    <button
+      class="flex items-center gap-3 bg-blue-700 text-gray-50 px-6 py-3 rounded-xl text-xl cursor-pointer"
+    
+    >
       <fa-icon [icon]="faGauge" ></fa-icon>
       <p class="font-normal" >Seller Dashboard</p>
     </button>
-    <button class="flex items-center gap-3 bg-gray-100 text-gray-600 px-6 py-3 rounded-xl text-xl font-semibold cursor-pointer" >Refresh Status</button>
+    <button
+      class="flex items-center gap-3 bg-gray-100 text-gray-600 px-6 py-3 rounded-xl text-xl font-semibold cursor-pointer"
+
+    >
+      Refresh Status
+    </button>
   </div>
 </div>

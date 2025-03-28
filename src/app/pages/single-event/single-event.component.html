@@ -135,6 +135,29 @@
             <p class="text-gray-500" *ngIf="data.description.length <= 80">
               {{ data.description }}
             </p>
+            <!-- <button class="flex items-center justify-center p-4 text-white gap-1 rounded-lg bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-600 cursor-pointer" >
+              <p class="font-bold text-lg" >Purchase Your Ticket Now</p>
+              <fa-icon [icon]="faArrowRightLong" ></fa-icon>
+            </button> -->
+            <button
+              class="flex flex-col gap-1 bg-yellow-50 text-yellow-600 w-[100%] items-center justify-center py-5 rounded-2xl mt-6 cursor-pointer"
+              *ngIf="(user.id && data.user.id !== user.id && data.tickets.length && data.tickets[0].status === 'QUEUED')"
+            >
+              <div class="flex gap-2" >
+                <fa-icon
+                  [icon]="faArrowRightLong"
+                  class="text-sm border-2 rounded-full px-1"
+                ></fa-icon>
+                <p class="font-bold">You're next in line! (Queue position: {{ data.tickets[0].queueNum }})</p>
+              </div>
+              <div class="flex gap-2 items-center justify-center" >
+                <fa-icon
+                  [icon]="faCircleNotch"
+                  class="font-bold animate-spin"
+                ></fa-icon>
+                <p class="font-medium text-sm" >Waiting for ticket</p>
+              </div>
+            </button>
             <button
               class="flex gap-2 bg-gray-100 w-[100%] items-center justify-center py-5 rounded-2xl mt-6 cursor-pointer"
               *ngIf="(user.id && data.user.id === user.id)"
@@ -149,7 +172,7 @@
             </button>
             <div
               class="flex flex-col w-full shadow-lg m-4 border-2 border-orange-100 rounded-2xl mx-auto"
-              *ngIf="(user.id && data.user.id !== user.id && data.tickets.length && data.tickets[0].status === 'PENDING')" 
+              *ngIf="(user.id && data.user.id !== user.id && data.tickets.length && data.tickets[0].status === 'PENDING')"
             >
               <div class="flex flex-col border-2 border-gray-100 rounded-md p-5 m-6 gap-4" >
                 <div class="flex items-center gap-4" >

@@ -8,6 +8,7 @@ import {
   faPencil,
   faArrowRightLong,
   faCircleXmark,
+  faCircleNotch,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -16,8 +17,6 @@ import { Store } from '@ngrx/store';
 import { selectUserFeature } from '../../store/selectors/user.selector';
 import { RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
-import { AuthService } from '../../core/services/auth.service';
-import { userAction } from '../../store/actions/user.action';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -39,6 +38,7 @@ export class EventListComponent implements OnInit {
   faPencil = faPencil;
   faArrowRightLong = faArrowRightLong;
   faCircleXmark = faCircleXmark;
+  faCircleNotch = faCircleNotch;
 
   data: any = []
   isLoading: boolean = true;
@@ -48,7 +48,6 @@ export class EventListComponent implements OnInit {
   totalItems = 0;
 
   private eventService = inject(EventService);
-  private authService = inject(AuthService);
   private store = inject(Store);
 
   user$ = this.store.select(selectUserFeature);

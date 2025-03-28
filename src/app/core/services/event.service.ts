@@ -20,6 +20,10 @@ export class EventService {
     return this.apiService.get<any>(`/protected/events?page=${newPage}`);
   }
 
+  protectedEventsOwn(newPage: number = 0): Observable<any> {
+    return this.apiService.get<any>(`/protected/events/me?page=${newPage}`);
+  }
+
   protectedEvent(eventIdOrformData: any): Observable<any> {    
     if (typeof eventIdOrformData === 'number')
       return this.apiService.get<any>(`/protected/events/${eventIdOrformData}`);

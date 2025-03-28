@@ -90,11 +90,16 @@ export class EventFormComponent implements OnInit {
                   console.log("update ", res);
                   this.form.controls['name'].setValue(res.data.name);
                   this.form.controls['description'].setValue(res.data.description);
-                  this.form.controls['location'].setValue(res.data.location);
                   this.form.controls['category'].setValue(res.data.category);
+                  this.form.controls['totalTickets'].setValue(res.data.totalTickets);
+                  this.form.controls['location'].setValue(res.data.location);
                   this.form.controls['eventDateTime'].setValue(res.data.eventDateTime);
                   this.form.controls['price'].setValue(res.data.price);
-                  this.form.controls['totalTickets'].setValue(res.data.totalTickets);
+                  if (res.data.availableTickets !== res.data.totalTickets) {
+                    this.form.controls['location'].disable();
+                    this.form.controls['eventDateTime'].disable();
+                    this.form.controls['price'].disable();
+                  } 
                   if (res.data.imageUrl) {
                     let imageName = res.data.imageUrl.slice(res.data.imageUrl.lastIndexOf('/') + 1);
                     if (imageName === "default.jpg") {
@@ -168,7 +173,10 @@ export class EventFormComponent implements OnInit {
       ],
     ],
     location: [
-      '',
+      {
+        value: '',
+        disabled: false
+      },
       [
         Validators.required,
         Validators.pattern(/^[a-zA-Z0-9\s.,'-]{5,100}$/)
@@ -189,7 +197,10 @@ export class EventFormComponent implements OnInit {
       ]
     ],
     price: [
-      5,
+      {
+        value: 5,
+        disabled: false
+      },
       [
         Validators.required,
         Validators.min(5),

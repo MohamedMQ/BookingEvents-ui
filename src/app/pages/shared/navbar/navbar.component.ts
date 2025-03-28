@@ -4,7 +4,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { Store } from '@ngrx/store';
 import { selectUserFeature, selectUserId } from '../../../store/selectors/user.selector';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -23,11 +23,20 @@ export class NavbarComponent {
   
   private renderer = inject(Renderer2);
   private store = inject(Store);
+  private router = inject(Router);
 
   user$ = this.store.select(selectUserFeature);
 
-  showHideModal():void {
+  showHideModal(): void {
     this.renderer.addClass(document.body, 'overflow-hidden');
     this.showModal.emit(true);
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  goToMyEvents(): void {
+    this.router.navigate(['/events/my-events']);
   }
 }

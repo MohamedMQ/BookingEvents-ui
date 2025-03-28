@@ -1,16 +1,19 @@
 <!-- *ngIf="start"  -->
-<div class="max-w-[900px] m-auto mt-8 pb-2 rounded-lg bg-white shadow-xl" *ngIf="!isFetching; else fetchingEvent" > 
+<div
+  class="max-w-[900px] m-auto mt-8 pb-2 rounded-lg bg-white shadow-xl"
+  *ngIf="!isFetching; else fetchingEvent"
+>
   <div
     class="flex flex-col gap-3 text-gray-100 py-10 px-8 bg-gradient-to-r from-blue-700 to-blue-900 rounded-t-lg"
   >
     <h1 class="font-bold text-3xl">
-      {{ (type === 'create') ? 'Create New Event' : 'Update Event' }}
+      {{ type === "create" ? "Create New Event" : "Update Event" }}
     </h1>
     <p class="text-lg">
       {{
-        (type === 'create')
-        ? 'List your event and start selling tickets'
-        : 'Update your event and speed up selling tickets'
+        type === "create"
+          ? "List your event and start selling tickets"
+          : "Update your event details"
       }}
     </p>
   </div>
@@ -19,6 +22,21 @@
     [formGroup]="form"
     (ngSubmit)="onCreateOrUpdate()"
   >
+    <div
+      class="flex gap-2 bg-yellow-50 text-yellow-700 border-1 border-yellow-200 rounded-xl p-6 font-medium"        
+      *ngIf="(type === 'update' && this.form.controls['price'].disabled)"
+    >
+      <fa-icon
+        class="text-2xl flex"
+        data-tooltip-target="EventName-tooltip"
+        [icon]="faCircleExclamation"
+      ></fa-icon>
+      <p>
+        Note: If you modify the total number of tickets, any tickets already
+        sold will remain valid. You can only increase the total number of
+        tickets, not decrease it below the current number of tickets.
+      </p>
+    </div>
     <div class="flex flex-col gap-2">
       <label class="font-medium text-gray-700" for="EventName"
         >Event Name</label
@@ -147,7 +165,7 @@
         "
       >
         <input
-          class="outline-none w-full p-2"
+          class="outline-none w-full p-2 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed"
           type="text"
           formControlName="location"
           id="Location"
@@ -169,8 +187,8 @@
             id="location-tooltip"
             class="absolute bg-gray-700 text-white text-xs rounded px-2 py-1 invisible opacity-0 transition-opacity duration-300 bottom-full right-0 mb-2 w-50"
           >
-            Location must be 5-100 characters long and can only contain
-            letters, numbers, spaces and special characters .,'-
+            Location must be 5-100 characters long and can only contain letters,
+            numbers, spaces and special characters .,'-
           </div>
         </div>
       </div>
@@ -198,20 +216,27 @@
       <div
         class="border-2 border-gray-200 rounded-md relative"
         [class.invalid]="
-          form.controls['category'].hasError('required')
-          && isSubmited
+          form.controls['category'].hasError('required') && isSubmited
         "
       >
-        <div class="relative" >
+        <div class="relative">
           <select
             class="outline-none w-full p-2 appearance-none"
             formControlName="category"
             id="Category"
           >
             <option value="">Select a category</option>
-            <option *ngFor="let category of musicCategories" [value]="category.value">{{ category.label }}</option>
+            <option
+              *ngFor="let category of musicCategories"
+              [value]="category.value"
+            >
+              {{ category.label }}
+            </option>
           </select>
-          <fa-icon class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none" [icon]="faCaretDown" ></fa-icon>
+          <fa-icon
+            class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+            [icon]="faCaretDown"
+          ></fa-icon>
         </div>
       </div>
       <p
@@ -230,7 +255,7 @@
       >
       <div>
         <input
-          class="w-full border-2 border-gray-200 p-2 rounded-md outline-0"
+          class="w-full border-2 border-gray-200 p-2 rounded-md outline-0 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed"
           type="datetime-local"
           formControlName="eventDateTime"
           id="EventDate"
@@ -242,7 +267,9 @@
         />
         <p
           class="text-sm mt-1 text-red-600"
-          *ngIf="form.controls['eventDateTime'].hasError('required') && isSubmited"
+          *ngIf="
+            form.controls['eventDateTime'].hasError('required') && isSubmited
+          "
         >
           <span
             ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
@@ -251,7 +278,9 @@
         </p>
         <p
           class="text-sm mt-1 text-red-600"
-          *ngIf="form.controls['eventDateTime'].hasError('minDate') && isSubmited"
+          *ngIf="
+            form.controls['eventDateTime'].hasError('minDate') && isSubmited
+          "
         >
           <span
             ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
@@ -265,12 +294,12 @@
         >Price Per Ticket</label
       >
       <div
-        class="border-2 border-gray-200 p-1.5 rounded-md relative"
+        class="border-2 border-gray-200 rounded-md relative"
         [class.invalid]="
-          (form.controls['price'].hasError('required')
-          || form.controls['price'].hasError('min')
-          || form.controls['price'].hasError('pattern'))
-          && isSubmited
+          (form.controls['price'].hasError('required') ||
+            form.controls['price'].hasError('min') ||
+            form.controls['price'].hasError('pattern')) &&
+          isSubmited
         "
       >
         <fa-icon
@@ -278,7 +307,7 @@
           [icon]="faDollarSign"
         ></fa-icon>
         <input
-          class="outline-none w-full ps-8"
+          class="outline-none w-full ps-8 p-2 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed"
           type="number"
           formControlName="price"
           id="PricePerTicket"
@@ -286,10 +315,10 @@
         <div
           class="tooltip-show absolute right-0 top-1/2 hidden"
           [class.hide]="
-            (form.controls['price'].hasError('required')
-            || form.controls['price'].hasError('min')
-            || form.controls['price'].hasError('pattern'))
-            && isSubmited
+            (form.controls['price'].hasError('required') ||
+              form.controls['price'].hasError('min') ||
+              form.controls['price'].hasError('pattern')) &&
+            isSubmited
           "
         >
           <fa-icon
@@ -307,10 +336,7 @@
       </div>
       <p
         class="text-sm mt-1 text-red-600"
-        *ngIf="
-          form.controls['price'].hasError('required')
-          && isSubmited
-        "
+        *ngIf="form.controls['price'].hasError('required') && isSubmited"
       >
         <span
           ><fa-icon class="mr-0.5" [icon]="faCircleExclamation"></fa-icon
@@ -320,9 +346,9 @@
       <p
         class="text-sm mt-1 text-red-600"
         *ngIf="
-          (form.controls['price'].hasError('min')
-          || form.controls['price'].hasError('pattern'))
-          && isSubmited
+          (form.controls['price'].hasError('min') ||
+            form.controls['price'].hasError('pattern')) &&
+          isSubmited
         "
       >
         <span
@@ -338,10 +364,10 @@
       <div
         class="border-2 border-gray-200 p-1.5 rounded-md relative"
         [class.invalid]="
-          (form.controls['totalTickets'].hasError('required')
-          || form.controls['totalTickets'].hasError('min')
-          || form.controls['totalTickets'].hasError('pattern'))
-          && isSubmited
+          (form.controls['totalTickets'].hasError('required') ||
+            form.controls['totalTickets'].hasError('min') ||
+            form.controls['totalTickets'].hasError('pattern')) &&
+          isSubmited
         "
       >
         <input
@@ -353,10 +379,10 @@
         <div
           class="tooltip-show absolute right-0 top-1/2 hidden"
           [class.hide]="
-            (form.controls['totalTickets'].hasError('required')
-            || form.controls['totalTickets'].hasError('min')
-            || form.controls['totalTickets'].hasError('pattern'))
-            && isSubmited
+            (form.controls['totalTickets'].hasError('required') ||
+              form.controls['totalTickets'].hasError('min') ||
+              form.controls['totalTickets'].hasError('pattern')) &&
+            isSubmited
           "
         >
           <fa-icon
@@ -374,9 +400,7 @@
       </div>
     </div>
     <div class="flex flex-col gap-4">
-      <label class="font-medium text-gray-700" for="image"
-        >Event Image</label
-      >
+      <label class="font-medium text-gray-700" for="image">Event Image</label>
       <div
         class="pl-4"
         *ngIf="form.controls['image']?.hasError('invalidImage')"
@@ -426,22 +450,25 @@
       type="submit"
       [disabled]="isLoading"
     >
-      <ng-container *ngIf="!isLoading; else loading" >
-        {{ (type === 'create') ? 'Create Event' : 'Update Event' }}
+      <ng-container *ngIf="!isLoading; else loading">
+        {{ type === "create" ? "Create Event" : "Update Event" }}
       </ng-container>
-      <ng-template #loading >
+      <ng-template #loading>
         <fa-icon
           class="animate-spin"
           [icon]="faSpinner"
           *ngIf="isLoading"
-      ></fa-icon>
+        ></fa-icon>
       </ng-template>
     </button>
   </form>
 </div>
 
-<ng-template #fetchingEvent >
-  <div class="h-[1200px] flex items-center justify-center" >
-    <fa-icon class="animate-spin text-2xl text-gray-500" [icon]="faSpinner" ></fa-icon>
+<ng-template #fetchingEvent>
+  <div class="h-[1200px] flex items-center justify-center">
+    <fa-icon
+      class="animate-spin text-2xl text-gray-500"
+      [icon]="faSpinner"
+    ></fa-icon>
   </div>
 </ng-template>

@@ -1,16 +1,30 @@
-import { Event } from './../../../../node_modules/@parcel/watcher/index.d';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { faLocationDot, faCalendarDays, faTicket, faUserGroup, faArrowRightLong, faCircleXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  Component,
+  inject,
+  OnInit
+} from '@angular/core';
+import {
+  faLocationDot,
+  faCalendarDays,
+  faTicket,
+  faUserGroup,
+  faArrowRightLong,
+  faCircleXmark,
+  faSpinner,
+  faCircleNotch
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { EventService } from '../../core/services/event.service';
 import { Store } from '@ngrx/store';
-import { ActivatedRoute, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
 import { selectUserFeature } from '../../store/selectors/user.selector';
 import { finalize } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { AuthService } from '../../core/services/auth.service';
-import { userAction } from '../../store/actions/user.action';
 import { TicketService } from '../../core/services/ticket.service';
 // import { NgxPaginationModule } from 'ngx-pagination'
 
@@ -32,6 +46,7 @@ export class SingleEventComponent implements OnInit {
   faArrowRightLong = faArrowRightLong;
   faCircleXmark = faCircleXmark;
   faSpinner = faSpinner
+  faCircleNotch = faCircleNotch;
 
   private eventId: number = 0;
   data: any = [];
@@ -124,12 +139,11 @@ export class SingleEventComponent implements OnInit {
           if (res.message === "Ticket added successfully.")
             this.data.tickets.push(res.data);
           else {
-            this.data.tickets[0].queueNum = res.data.queuePos;
-            this.queuePos = this.data.queuePos;
+            this.data.tickets[0] = res.data;
           }
         },
         error: (err) => {
-
+          console.log("ERROR HAPPENED : ", err);
         }
       })
   }

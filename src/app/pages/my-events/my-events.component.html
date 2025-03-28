@@ -3,7 +3,14 @@
     class="flex bg-white shadow-sm border-2 border-gray-100 rounded-xl p-8 items-center justify-between"
   >
     <div class="flex items-center gap-6">
-      <fa-icon [icon]="faArrowLeft"></fa-icon>
+      <div
+        class="cursor-pointer"
+        (click)="goBack()"
+      >
+        <fa-icon
+          [icon]="faArrowLeft"
+        ></fa-icon>
+      </div>
       <div class="flex flex-col gap-1">
         <h1 class="font-bold text-3xl">My Events</h1>
         <p class="text-xl text-gray-500">
@@ -12,7 +19,8 @@
       </div>
     </div>
     <div
-      class="flex items-center gap-4 bg-blue-700 text-white h-full py-3 px-5 rounded-xl"
+      class="flex items-center gap-4 bg-blue-700 text-white h-full py-3 px-5 rounded-xl cursor-pointer"
+      (click)="goToCreateEvent()"
     >
       <fa-icon class="text-xl" [icon]="faPlus"></fa-icon>
       <p class="font-semibold text-lg">Create Event</p>
@@ -38,11 +46,17 @@
               </p>
             </div>
             <div class="flex items-start justify-start gap-2" >
-              <button class="flex gap-2 font-medium text-gray-500 bg-gray-100 h-fit px-4 py-2 rounded-xl" >
+              <button
+                class="flex gap-2 font-medium text-gray-500 bg-gray-100 h-fit px-4 py-2 rounded-xl cursor-pointer"
+                (click)="goToUpdateEvent(item.id)"
+              >
                 <fa-icon [icon]="faPenToSquare" ></fa-icon>
                 <p>Edit</p>
               </button>
-              <button class="flex items-center gap-2 font-medium text-red-600 h-fit px-4 py-2" >
+              <button
+                class="flex items-center gap-2 font-medium text-red-600 h-fit px-4 py-2 cursor-pointer"
+                
+              >
                 <fa-icon [icon]="faBan" ></fa-icon>
                 <p>Cancel
                 </p>
@@ -55,14 +69,14 @@
                 <fa-icon class="text-orange-400" [icon]="faTicket" ></fa-icon>
                 <p>Tickets Sold</p>
               </div>
-              <p><span class="text-3xl font-semibold" >{{ item.availableTickets }}</span>/{{ item.totalTickets }}</p>
+              <p><span class="text-3xl font-semibold" >{{ item.totalTickets - item.availableTickets }}</span>/{{ item.totalTickets }}</p>
             </div>
             <div class="bg-gray-100 p-3 rounded-xl  flex flex-col gap-2" >
               <div class="flex gap-2" >
                 <fa-icon class="text-orange-400" [icon]="faMoneyBill1" ></fa-icon>
                 <p>Revenue</p> <!-- I SHOULD CALCULATE THE SOME (NOT DONE YET) -->
               </div>
-              <p class="text-3xl font-semibold" >$0</p>
+              <p class="text-3xl font-semibold" >${{ item.price * item.tickets.length }}</p>
             </div>
             <div class="bg-gray-100 p-3 rounded-xl  flex flex-col gap-2" >
               <div class="flex gap-2" >
@@ -84,10 +98,19 @@
       </div>
     </div>
   </div>
-  <div class="flex items-center justify-center py-14">
+
+  <div
+    class="flex items-center justify-center py-14"
+    *ngIf="data.length; else isLoadingOrEvents"
+  >
     <pagination-controls
       class="my-pagination"
-      (pageChange)="page = $event"
+      (pageChange)="loadMoreEvents($event)"
     ></pagination-controls>
   </div>
+  <ng-template #isLoadingOrEvents >
+    <p class="text-center font-semibold text-2xl my-20" >
+      {{ !isLoading ? "No Events Found For The Moment &nbsp;😥" : "" }} 
+    </p>
+  </ng-template>
 </div>

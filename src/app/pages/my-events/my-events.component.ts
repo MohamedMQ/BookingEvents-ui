@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { faArrowLeft, faPlus, faPenToSquare, faBan, faTicket, faMoneyBill1, faCalendarDays, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { NgxPaginationModule } from 'ngx-pagination'
+import { finalize } from 'rxjs';
+import { EventService } from '../../core/services/event.service';
+import { environment } from '../../../environments/environment.development';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-my-events',
   imports: [
     CommonModule,
     FontAwesomeModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    RouterModule
   ],
   templateUrl: './my-events.component.html',
   styleUrl: './my-events.component.css'
@@ -24,177 +29,63 @@ export class MyEventsComponent {
   faCalendarDays = faCalendarDays;
   faCircleInfo = faCircleInfo;
 
+  data: any = []
+  isLoading: boolean = true;
+  imageUrl: string = environment.imageBaseUrl;
   page: number = 1;
-  itemsPerPage: number = 3;
+  itemsPerPage: number = 10;
+  totalItems = 0;
 
-  data = [
-    {
-      "id": 1,
-      "name": "eminem",
-      "description": "a ceremony of eminem birthday",
-      "location": "CA. Los Angeles",
-      "category": "hip hop",
-      "eventDateTime": "2023-05-20T18:00:00",
-      "price": 500.00,
-      "totalTickets": 500,
-      "availableTickets": 500,
-      "imageUrl": "https://loremflickr.com/cache/resized/defaultImage.small_1000_600_nofilter.jpg",
-      "user": {
-          "id": 1,
-          "name": "mmaqbour",
-          "email": "mmaqbour@gmail.com",
-          "createdAt": "2025-03-08T18:04:05.689+00:00",
-          "updatedAt": "2025-03-08T18:04:05.689+00:00",
-          "authorities": [],
-          "username": "mmaqbour@gmail.com",
-          "accountNonExpired": true,
-          "accountNonLocked": true,
-          "credentialsNonExpired": true,
-          "enabled": true
-      },
-      "createdAt": "2025-03-08",
-      "updatedAt": "2025-03-08"
-    },
-    {
-      "id": 1,
-      "name": "eminem",
-      "description": "a ceremony of eminem birthday",
-      "location": "CA. Los Angeles",
-      "category": "hip hop",
-      "eventDateTime": "2025-05-20T18:00:00",
-      "price": 500.00,
-      "totalTickets": 500,
-      "availableTickets": 500,
-      "imageUrl": "https://loremflickr.com/cache/resized/defaultImage.small_1000_600_nofilter.jpg",
-      "user": {
-          "id": 1,
-          "name": "mmaqbour",
-          "email": "mmaqbour@gmail.com",
-          "createdAt": "2025-03-08T18:04:05.689+00:00",
-          "updatedAt": "2025-03-08T18:04:05.689+00:00",
-          "authorities": [],
-          "username": "mmaqbour@gmail.com",
-          "accountNonExpired": true,
-          "accountNonLocked": true,
-          "credentialsNonExpired": true,
-          "enabled": true
-      },
-      "createdAt": "2025-03-08",
-      "updatedAt": "2025-03-08"
-    },
-    {
-      "id": 1,
-      "name": "eminem",
-      "description": "a ceremony of eminem birthday",
-      "location": "CA. Los Angeles",
-      "category": "hip hop",
-      "eventDateTime": "2025-05-20T18:00:00",
-      "price": 500.00,
-      "totalTickets": 500,
-      "availableTickets": 500,
-      "imageUrl": "https://loremflickr.com/cache/resized/defaultImage.small_1000_600_nofilter.jpg",
-      "user": {
-          "id": 2,
-          "name": "rennacir",
-          "email": "rennacir@gmail.com",
-          "createdAt": "2025-03-08T18:04:05.689+00:00",
-          "updatedAt": "2025-03-08T18:04:05.689+00:00",
-          "authorities": [],
-          "username": "rennacir@gmail.com",
-          "accountNonExpired": true,
-          "accountNonLocked": true,
-          "credentialsNonExpired": true,
-          "enabled": true
-      },
-      "createdAt": "2025-03-08",
-      "updatedAt": "2025-03-08"
-    },
-    {
-      "id": 2,
-      "name": "eminem",
-      "description": "a ceremony of eminem birthday",
-      "location": "CA. Los Angeles",
-      "category": "hip hop",
-      "eventDateTime": "2025-05-20T18:00:00",
-      "price": 500.00,
-      "totalTickets": 500,
-      "availableTickets": 500,
-      "imageUrl": "https://loremflickr.com/cache/resized/defaultImage.small_1000_600_nofilter.jpg",
-      "user": {
-          "id": 1,
-          "name": "mmaqbour",
-          "email": "mmaqbour@gmail.com",
-          "createdAt": "2025-03-08T18:04:05.689+00:00",
-          "updatedAt": "2025-03-08T18:04:05.689+00:00",
-          "authorities": [],
-          "username": "mmaqbour@gmail.com",
-          "accountNonExpired": true,
-          "accountNonLocked": true,
-          "credentialsNonExpired": true,
-          "enabled": true
-      },
-      "createdAt": "2025-03-08",
-      "updatedAt": "2025-03-08"
-    },
-    {
-      "id": 1,
-      "name": "eminem",
-      "description": "a ceremony of eminem birthday",
-      "location": "CA. Los Angeles",
-      "category": "hip hop",
-      "eventDateTime": "2025-05-20T18:00:00",
-      "price": 500.00,
-      "totalTickets": 500,
-      "availableTickets": 500,
-      "imageUrl": "https://loremflickr.com/cache/resized/defaultImage.small_1000_600_nofilter.jpg",
-      "user": {
-          "id": 2,
-          "name": "rennacir",
-          "email": "rennacir@gmail.com",
-          "createdAt": "2025-03-08T18:04:05.689+00:00",
-          "updatedAt": "2025-03-08T18:04:05.689+00:00",
-          "authorities": [],
-          "username": "rennacir@gmail.com",
-          "accountNonExpired": true,
-          "accountNonLocked": true,
-          "credentialsNonExpired": true,
-          "enabled": true
-      },
-      "createdAt": "2025-03-08",
-      "updatedAt": "2025-03-08"
-    },
-    {
-      "id": 1,
-      "name": "eminem",
-      "description": "a ceremony of eminem birthday",
-      "location": "CA. Los Angeles",
-      "category": "hip hop",
-      "eventDateTime": "2025-05-20T18:00:00",
-      "price": 500.00,
-      "totalTickets": 500,
-      "availableTickets": 500,
-      "imageUrl": "https://loremflickr.com/cache/resized/defaultImage.small_1000_600_nofilter.jpg",
-      "user": {
-          "id": 2,
-          "name": "rennacir",
-          "email": "rennacir@gmail.com",
-          "createdAt": "2025-03-08T18:04:05.689+00:00",
-          "updatedAt": "2025-03-08T18:04:05.689+00:00",
-          "authorities": [],
-          "username": "rennacir@gmail.com",
-          "accountNonExpired": true,
-          "accountNonLocked": true,
-          "credentialsNonExpired": true,
-          "enabled": true
-      },
-      "createdAt": "2025-03-08",
-      "updatedAt": "2025-03-08"
-    }
-  ]
+  private eventService = inject(EventService);
+  private router = inject(Router);
+  private location = inject(Location);
+
+  loadEvents(pageNum: number, firstLoad: boolean) {
+    this.eventService
+      .protectedEventsOwn(pageNum - 1)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe({
+        next: (response) => {
+          console.log(response);
+          firstLoad ?
+            this.page = response.pagination.currentPage :
+            this.page = response.pagination.currentPage + 1;
+          this.itemsPerPage = response.pagination.pageSize;
+          this.totalItems = response.pagination.totalElements;
+          this.data = response.data;
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+  }
+
+  ngOnInit(): void {
+    this.loadEvents(this.page, true);
+  }
+
+  loadMoreEvents(newPage: number) {
+    this.loadEvents(newPage, false);
+  }
 
   isBefore(item: any): boolean {
     if (new Date(item.eventDateTime) < new Date())
       return true
     return false
+  }
+
+  goToCreateEvent(): void {
+    this.router.navigate(['/events/create']);
+  }
+
+  goToUpdateEvent(eventId: number): void {
+    this.router.navigate([`/events/update/${eventId}`]);
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }
