@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit } from '@angular/core';
 import {
   faDollarSign,
   faCircleExclamation,
@@ -21,7 +21,7 @@ import { EventService } from '../../../core/services/event.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment.development';
 import { Store } from '@ngrx/store';
-import { selectUserFeature, selectUserId } from '../../../store/selectors/user.selector';
+import { selectUserId } from '../../../store/selectors/user.selector';
 
 @Component({
   selector: 'app-event-form',
@@ -95,10 +95,12 @@ export class EventFormComponent implements OnInit {
                   this.form.controls['location'].setValue(res.data.location);
                   this.form.controls['eventDateTime'].setValue(res.data.eventDateTime);
                   this.form.controls['price'].setValue(res.data.price);
-                  if (res.data.availableTickets !== res.data.totalTickets) {
+                  if (res.data.ticketNumber !== res.data.totalTickets) {
                     this.form.controls['location'].disable();
                     this.form.controls['eventDateTime'].disable();
                     this.form.controls['price'].disable();
+                    this.form.controls['totalTickets'].setValidators([Validators.min(Number(res.data.totalTickets))]);
+                    this.form.controls['totalTickets'].updateValueAndValidity();
                   } 
                   if (res.data.imageUrl) {
                     let imageName = res.data.imageUrl.slice(res.data.imageUrl.lastIndexOf('/') + 1);
@@ -293,8 +295,7 @@ export class EventFormComponent implements OnInit {
       formData.append('image', image, image.name);
     }
     this.isLoading = true;
-    if (this.type === "create") {
-      console.log(formData);
+    if (this.type === "create")
       this.eventService
         .protectedEvent(formData)
         .subscribe({
@@ -306,10 +307,25 @@ export class EventFormComponent implements OnInit {
             }, 1000);
           },
           error: (err) => {
-            this.isLoading = true;
+            this.isLoading = false;
             console.log(err);
           }
         })
-    }
+    else
+      this.eventService
+        .protectedEventPut(this.eventId, formData)
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            setTimeout(() => {
+              this.router.navigate([`/events/${res.data.id}`]);
+              this.isLoading = false;
+            }, 1000);
+          },
+          error: (err) => {
+            this.isLoading = false;
+            console.log(err);
+          }
+      })
   }
 }

@@ -114,7 +114,7 @@
           </button>
           <button
             class="flex gap-2 bg-gray-200 w-[100%] items-center justify-center py-5 rounded-2xl mt-6 cursor-pointer"
-            *ngIf="(user.id && item.user.id === user.id)"
+            *ngIf="(user.id && item.user.id === user.id && !isBefore(data))"
           >
             <fa-icon
               [icon]="faPencil"

@@ -72,6 +72,7 @@ export class MyEventsComponent {
   }
 
   isBefore(item: any): boolean {
+    console.log(new Date(item.eventDateTime) < new Date());
     if (new Date(item.eventDateTime) < new Date())
       return true
     return false

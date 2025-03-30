@@ -32,7 +32,7 @@
       <div class="flex-1/5 rounded-lg">
         <img
           class="rounded-lg"
-          src="https://loremflickr.com/cache/resized/defaultImage.small_1000_600_nofilter.jpg"
+          [src]="imageUrl + item.imageUrl"
           alt=""
         />
       </div>
@@ -49,6 +49,7 @@
               <button
                 class="flex gap-2 font-medium text-gray-500 bg-gray-100 h-fit px-4 py-2 rounded-xl cursor-pointer"
                 (click)="goToUpdateEvent(item.id)"
+                *ngIf="!isBefore(item)"
               >
                 <fa-icon [icon]="faPenToSquare" ></fa-icon>
                 <p>Edit</p>
@@ -90,8 +91,15 @@
                 <fa-icon class="text-orange-400" [icon]="faCircleInfo" ></fa-icon>
                 <p>Status</p>
               </div>
-              <p class="font-medium" *ngIf="!isBefore(item)" >Active</p>
-              <p class="font-medium" *ngIf="isBefore(item)" >InActive</p>
+              <p
+                class="font-medium"
+                *ngIf="!isBefore(item); else inActive"
+              >Active</p>
+              <ng-template #inActive >
+                <p
+                  class="font-medium"
+                >In-Active</p>
+              </ng-template>
             </div>
           </div>
         </div>

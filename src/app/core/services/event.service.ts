@@ -30,6 +30,10 @@ export class EventService {
     return this.apiService.post<any>(`/protected/events`, eventIdOrformData);
   }
 
+  protectedEventPut(eventId: number, formData: any): Observable<any> {
+    return this.apiService.put<any>(`/protected/events/${eventId}`, formData)
+  }
+
   getDefaultImage(): Observable<any> {
     return this.apiService.get<any>("/uploads/users/events/default.jpg")
   }

@@ -106,4 +106,11 @@ export class EventListComponent implements OnInit {
   loadMoreEvents(newPage: number) {
     this.loadEvents(newPage, false);
   }
+
+  isBefore(item: any): boolean {
+    console.log(new Date(item.eventDateTime) < new Date());
+    if (new Date(item.eventDateTime) < new Date())
+      return true
+    return false
+  }
 }
