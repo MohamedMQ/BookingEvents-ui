@@ -33,7 +33,7 @@ import { InputFocusDirective } from '../../../core/directives/input-focus.direct
 export class SignInComponent {
   @Output() tabChange = new EventEmitter<string>();
   @Output() hideModal: EventEmitter<void> = new EventEmitter<void>();
-  
+
   isSubmited: boolean = false;
   isLoading: boolean = false;
   errorMessage: string = '';
@@ -61,7 +61,7 @@ export class SignInComponent {
     if (this.form.invalid) return;
     this.isLoading = true;
     const { email, password } = this.form.value;
-    console.log(email, password);
+    // console.log(email, password);
     const userDetails = { email, password };
     this.authService
       .publicLogin(userDetails)
@@ -81,7 +81,7 @@ export class SignInComponent {
           this.hideModal.emit();
         },
         error: (err) => {
-          console.log('loging failed' + err);
+          // console.log('loging failed' + err);
           this.errorMessage = 'login failed, pleaese try again';
         },
       });

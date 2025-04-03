@@ -1,0 +1,87 @@
+<div class="max-w-[1440px] m-auto p-8 cursor-default">
+  <div class="flex justify-between mt-16 mb-8 items-center">
+    <div class="leading-[50px]">
+      <h1 class="text-4xl font-bold">My Tickets</h1>
+      <p class="text-[20px] text-gray-500">
+        Manage and view all your tickets in one place
+      </p>
+    </div>
+    <div
+      class="flex items-center justify-center border-2 border-gray-100 shadow-sm shadow-gray-300 py-2 px-4 gap-2"
+    >
+      <fa-icon
+        [icon]="faTicket"
+        class="text-gray-500 font-bold"
+      ></fa-icon>
+      <p class="text-gray-500 font-bold">{{ totalItems }} Total Tickets</p>
+    </div>
+  </div>
+  <div class="text-2xl font-bold pb-2" >Upcoming Events</div>
+  <div class="grid lg:grid-cols-3 gap-8 sm:grid-cols-1 md:grid-cols-2">
+    <div
+      class="rounded-xl shadow-lg h-auto transition-transform transform hover:scale-105 duration-500 cursor-default bg-gray-50"
+      *ngFor="
+        let item of data
+          | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }
+      "
+      [routerLink]="'/tickets/' + item.tickets[0].id"
+    >
+      <ng-container
+        *ngIf="user$ | async as user"
+      >
+        <div class="flex flex-col gap-1 p-6">
+          <div>
+            <div class="flex justify-between items-start">
+              <h1 class="text-3xl font-bold w-[70%] capitalize">
+                {{ item.name }}
+              </h1>
+              <p class="text-lg font-bold p-[5px] rounded-lg {{ isBefore(item) ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700' }}" >
+                {{
+                  isBefore(item)
+                  ? 'Invalid'
+                  : 'valid'
+                }}
+              </p>
+            </div>
+            <p class="text-gray-500" >
+              Purchased on
+              {{ item.tickets[0].updatedAt | date : "dd/MM/yyyy" }}
+            </p>
+          </div>
+          <div class="flex flex-col leading-7 py-2 font-medium" >
+            <div class="flex gap-3 items-center">
+              <fa-icon [icon]="faCalendarDays" class="text-gray-500"></fa-icon>
+              <p class="text-gray-500">
+                {{ item.eventDateTime | date : "dd/MM/yyyy" }}
+              </p>
+            </div>
+            <div class="flex gap-3 items-center">
+              <fa-icon [icon]="faLocationDot" class="text-gray-500"></fa-icon>
+              <p class="text-gray-500">
+                {{ item.location }}
+              </p>
+            </div>
+          </div>
+          <div class="flex justify-between" >
+            <p class="text-blue-600 font-semibold" >${{ item.price }}.00</p>
+            <div class="flex gap-1 text-gray-500 font-semibold" >
+              <p>View Ticket</p>
+              <fa-icon [icon]="faArrowRightLong" ></fa-icon>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="flex items-center justify-center py-14" *ngIf="data.length; else isLoadingOrEvents">
+    <pagination-controls
+      class="my-pagination"
+      (pageChange)="loadMoreEvents($event)"
+    ></pagination-controls>
+  </div>
+  <ng-template #isLoadingOrEvents >
+    <p class="text-center font-semibold text-2xl my-20" >
+      {{ !isLoading ? "No Tickets Found For The Moment &nbsp;😥" : "" }}
+    </p>
+  </ng-template>
+</div>

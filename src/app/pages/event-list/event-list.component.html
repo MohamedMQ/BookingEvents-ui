@@ -18,7 +18,7 @@
   </div>
   <div class="grid lg:grid-cols-3 gap-8 sm:grid-cols-1 md:grid-cols-2">
     <div
-      class="rounded-xl shadow-lg h-auto transition-transform transform hover:scale-105 duration-500 cursor-default"
+      class="rounded-xl shadow-lg h-auto transition-transform transform hover:scale-105 duration-500 cursor-default bg-gray-50"
       *ngFor="
         let item of data
           | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }
@@ -29,7 +29,7 @@
         *ngIf="user$ | async as user"
       >
         <img
-          class="h-60 w-[100%] rounded-t-xl object-cover"
+          class="h-60 w-[100%] rounded-t-xl object-cover {{ (item.tickets.length && item.tickets[0].status === 'CONFIRMED') ? 'brightness-40' : '' }}"
           [src]="imageUrl + item.imageUrl"
           alt="sorry"
         />
@@ -170,7 +170,7 @@
   </div>
   <ng-template #isLoadingOrEvents >
     <p class="text-center font-semibold text-2xl my-20" >
-      {{ !isLoading ? "No Events Found For The Moment &nbsp;😥" : "" }} 
+      {{ !isLoading ? "No Events Found For The Moment &nbsp;😥" : "" }}
     </p>
   </ng-template>
 </div>

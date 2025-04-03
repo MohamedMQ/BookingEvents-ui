@@ -28,7 +28,10 @@
   </div>
   <div class="bg-white p-8 my-10 rounded-xl shadow-sm border-2 border-gray-100">
     <h1 class="text-3xl font-bold">Upcoming Events</h1>
-    <div class="flex p-8 gap-8 border-2 border-gray-100 rounded-xl shadow-sm mt-8" *ngFor="let item of data | paginate : { itemsPerPage: itemsPerPage, currentPage: page }">
+    <div
+      class="flex p-8 gap-8 border-2 border-gray-100 rounded-xl shadow-sm mt-8 {{ item.eventStatus == 'DESTROYED' ? 'border-2 border-red-100 ' : '' }} "
+      *ngFor="let item of data | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }"
+    >
       <div class="flex-1/5 rounded-lg">
         <img
           class="rounded-lg"
@@ -49,14 +52,15 @@
               <button
                 class="flex gap-2 font-medium text-gray-500 bg-gray-100 h-fit px-4 py-2 rounded-xl cursor-pointer"
                 (click)="goToUpdateEvent(item.id)"
-                *ngIf="!isBefore(item)"
+                *ngIf="(!isBefore(item) && item.eventStatus !== 'DESTROYED')"
               >
                 <fa-icon [icon]="faPenToSquare" ></fa-icon>
                 <p>Edit</p>
               </button>
               <button
                 class="flex items-center gap-2 font-medium text-red-600 h-fit px-4 py-2 cursor-pointer"
-                
+                (click)="cancelEvent(item)"
+                *ngIf="item.eventStatus !== 'DESTROYED'"
               >
                 <fa-icon [icon]="faBan" ></fa-icon>
                 <p>Cancel
@@ -64,20 +68,58 @@
               </button>
             </div>
           </div>
+          <div
+            class="text-red-600 flex gap-2 mt-3 items-center"
+            *ngIf="item.eventStatus === 'DESTROYED'"
+          >
+            <fa-icon [icon]="faBan" ></fa-icon>
+            <p>Event cancelled</p>
+          </div>
           <div class="grid grid-cols-4 mt-4 gap-4" >
             <div class="bg-gray-100 p-3 rounded-xl flex flex-col gap-2" >
               <div class="flex gap-2" >
                 <fa-icon class="text-orange-400" [icon]="faTicket" ></fa-icon>
-                <p>Tickets Sold</p>
+                <p>
+                  {{
+                    item.eventStatus === 'CONFIRMED'
+                    ? "Tickets Sold"
+                    : "Tickets Refunded"
+                  }}
+                </p>
               </div>
-              <p><span class="text-3xl font-semibold" >{{ item.totalTickets - item.availableTickets }}</span>/{{ item.totalTickets }}</p>
+              <p *ngIf="item.eventStatus === 'DESTROYED'; else notCanceled" >
+                <span class="text-3xl font-semibold" >
+                  0
+                </span>
+                refunded
+              </p>
+              <ng-template #notCanceled >
+                <p>
+                  <span class="text-3xl font-semibold" >
+                    {{ item.totalTickets - item.availableTickets }}
+                  </span>
+                  /{{ item.totalTickets }}
+                </p>
+              </ng-template>
             </div>
             <div class="bg-gray-100 p-3 rounded-xl  flex flex-col gap-2" >
               <div class="flex gap-2" >
                 <fa-icon class="text-orange-400" [icon]="faMoneyBill1" ></fa-icon>
-                <p>Revenue</p> <!-- I SHOULD CALCULATE THE SOME (NOT DONE YET) -->
+                <p>
+                  {{
+                    item.eventStatus === 'CONFIRMED'
+                    ? "Revenue"
+                    : "Amount Refunded"
+                  }}
+                </p>
               </div>
-              <p class="text-3xl font-semibold" >${{ item.price * item.tickets.length }}</p>
+              <p class="text-3xl font-semibold" >
+                {{
+                  (item.eventStatus === 'DESTROYED')
+                  ? "$0"
+                  : (item.price * item.tickets.length) | currency
+                }}
+              </p>
             </div>
             <div class="bg-gray-100 p-3 rounded-xl  flex flex-col gap-2" >
               <div class="flex gap-2" >
@@ -91,15 +133,15 @@
                 <fa-icon class="text-orange-400" [icon]="faCircleInfo" ></fa-icon>
                 <p>Status</p>
               </div>
-              <p
-                class="font-medium"
-                *ngIf="!isBefore(item); else inActive"
-              >Active</p>
-              <ng-template #inActive >
-                <p
-                  class="font-medium"
-                >In-Active</p>
-              </ng-template>
+              <p class="font-medium" >
+                {{
+                  item.eventStatus !== 'CONFIRMED'
+                  ? "Cancelled"
+                  : !isBefore(item)
+                  ? "Active"
+                  : "Inactive"
+                }}
+              </p>
             </div>
           </div>
         </div>
@@ -118,7 +160,7 @@
   </div>
   <ng-template #isLoadingOrEvents >
     <p class="text-center font-semibold text-2xl my-20" >
-      {{ !isLoading ? "No Events Found For The Moment &nbsp;😥" : "" }} 
+      {{ !isLoading ? "No Events Found For The Moment &nbsp;😥" : "" }}
     </p>
   </ng-template>
 </div>

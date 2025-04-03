@@ -11,7 +11,7 @@ export const initialState: User = {
 export const userReducer = createReducer(
   initialState,
   on(userAction, (state, { user }) => {
-    console.log('------------------', user);
+    // console.log('------------------', user);
     return {
       ...state,
       id: user.id,

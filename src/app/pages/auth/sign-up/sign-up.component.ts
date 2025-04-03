@@ -66,11 +66,11 @@ export class SignUpComponent {
       )
       .subscribe({
         next: (response) => {
-          console.log('User registered successfully' + response);
+          // console.log('User registered successfully' + response);
           this.tabChange.emit('signin');
         },
         error: (err) => {
-          console.log('Registed failed' + err);
+          // console.log('Registed failed' + err);
           this.errorMessage = 'registration failed, pleaese try again';
         },
       });

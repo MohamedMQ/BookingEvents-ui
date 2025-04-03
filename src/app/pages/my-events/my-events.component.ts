@@ -35,6 +35,7 @@ export class MyEventsComponent {
   page: number = 1;
   itemsPerPage: number = 10;
   totalItems = 0;
+  LoadingCanceling: boolean = false;
 
   private eventService = inject(EventService);
   private router = inject(Router);
@@ -58,7 +59,7 @@ export class MyEventsComponent {
           this.data = response.data;
         },
         error: (err) => {
-          console.log(err);
+          // console.log(err);
         }
       })
   }
@@ -72,7 +73,7 @@ export class MyEventsComponent {
   }
 
   isBefore(item: any): boolean {
-    console.log(new Date(item.eventDateTime) < new Date());
+    // console.log(new Date(item.eventDateTime) < new Date());
     if (new Date(item.eventDateTime) < new Date())
       return true
     return false
@@ -89,4 +90,23 @@ export class MyEventsComponent {
   goBack(): void {
     this.location.back();
   }
+
+  cancelEvent(item: any) {
+    this.LoadingCanceling = true;
+    this.eventService
+      .deleteProtectedEvent(item.id)
+      .subscribe({
+        next: (res) => {
+          item.eventStatus = res.data.eventStatus;
+          console.log(item);
+          this.LoadingCanceling = true;
+        },
+        error: (err) => {
+          console.log(err);
+          this.LoadingCanceling = true;
+        }
+      })
+  }
 }
+
+// deleteProtectedEvent

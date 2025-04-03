@@ -1,0 +1,143 @@
+<ng-container *ngIf="!isLoading; else loading" >
+  <div
+    class="max-w-[900px] m-auto mb-8"
+  >
+    <div class="flex flex-1/2 flex-col p-10">
+      <div class="flex items-center justify-between pt-8 text-gray-500">
+        <button
+          class="flex gap-2 cursor-pointer"
+          [routerLink]="'/tickets/my-tickets'"
+        >
+          <fa-icon [icon]="faArrowLeft" ></fa-icon>
+          <p>Back to My Tickets</p>
+        </button>
+        <div class="flex gap-10 font-semibold" >
+          <button
+            class="flex gap-2 cursor-pointer"
+
+          >
+            <fa-icon [icon]="faDownload" ></fa-icon>
+            <p>Save</p>
+          </button>
+          <button
+            class="flex gap-2 cursor-pointer"
+
+          >
+            <fa-icon [icon]="faShareNodes" ></fa-icon>
+            <p>Share</p>
+          </button>
+        </div>
+      </div>
+      <div class="bg-gray-50 my-10 p-6 shadow-lg rounded-xl" >
+        <p class="text-3xl font-bold" >{{ data.name }}</p>
+        <p class="text-gray-500 mt-1" >{{ data.eventDateTime | date : "dd/MM/yyyy" }} at {{ data.location }}</p>
+        <div class="flex items-center gap-4 mx-2 my-4 text-sm" >
+          <p
+            class="font-bold px-4 rounded-lg {{ isBefore(data) ? 'text-red-700 bg-red-50' : 'text-green-700 bg-green-50' }}"
+          >
+          {{ isBefore(data) ? 'Invalid Ticket' : 'Valid Ticket' }}
+          </p>
+          <p class="text-gray-500 text-sm" >Purchased on {{ data.tickets[0].updatedAt | date : "dd/MM/yyyy" }}</p>
+        </div>
+      </div>
+      <div class="rounded-xl shadow-lg h-auto">
+        <div class="h-90 w-[100%] rounded-t-xl relative">
+          <img
+            class="h-90 w-[100%] rounded-t-xl object-cover brightness-40"
+            [src]="imageUrl + data.imageUrl"
+            alt="sorry"
+          />
+          <p class="absolute bottom-6 left-8 text-3xl text-white font-bold">
+            {{ data.name }}
+          </p>
+        </div>
+        <div class="px-10 p-6 bg-white rounded-xl">
+          <div class="grid md:grid-cols-2 pb-4 border-b-2 border-gray-100">
+            <div
+              class="grid grid-cols-2 md:grid-cols-1 md:border-r-2 border-gray-100"
+            >
+              <div class="flex items-center gap-4 py-2 rounded-2xl">
+                <fa-icon
+                  class="text-blue-500"
+                  [icon]="faCalendarDays"
+                ></fa-icon>
+                <div class="flex flex-col">
+                  <p class="text-gray-500 text-sm">Date</p>
+                  <p>{{ data.eventDateTime | date : "dd/MM/yyyy" }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 py-2 rounded-2xl">
+                <fa-icon
+                  class="text-blue-500"
+                  [icon]="faLocationDot"
+                ></fa-icon>
+                <div class="flex flex-col">
+                  <p class="text-gray-500 text-sm">Location</p>
+                  <p>{{ data.location }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 py-2 rounded-2xl">
+                <fa-icon class="text-blue-500" [icon]="faUser"></fa-icon>
+                <div class="flex flex-col">
+                  <p class="text-gray-500 text-sm">Ticket Holder</p>
+                  <p>{{ data.user.name }}</p>
+                  <p class="text-gray-500 text-sm">{{ data.user.email }}</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 py-2 rounded-2xl">
+                <fa-icon class="text-blue-500" [icon]="faTicket"></fa-icon>
+                <div class="flex flex-col">
+                  <p class="text-gray-500 text-sm">Ticket Price</p>
+                  <p>${{ data.price }}.00</p>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col flex-1/2 justify-center items-center">
+              <div
+                class="w-full h-80 flex flex-col items-center justify-center gap-1 text-gray-500"
+              >
+                <img
+                  class="h-[50%]"
+                  [src]="imageUrl + data.tickets[0].qrCodeUrl"
+                  alt="ticket code qr"
+                />
+                <p class="break-all">Ticket Holder ID: {{ data.user.id }}</p>
+                <p class="break-all">Ticket ID: {{ data.tickets[0].id }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col py-6">
+            <h2 class="text-lg font-semibold">Important Information</h2>
+            <div class="flex flex-col my-2 gap-2">
+              <p>&bull; Please arrive at least 30 minutes before the event</p>
+              <p>&bull; Have your ticket QR code ready for scanning</p>
+              <p>&bull; This ticket is non-transferable</p>
+            </div>
+          </div>
+          <div class="flex justify-between">
+            <p>
+              Purchase Date:
+              {{ data.tickets[0].updatedAt | date : "dd/MM/yyyy, hh:mm:ss" }}
+            </p>
+            <p
+              class="font-semibold {{
+                isBefore(data) ? 'text-red-600' : 'text-blue-600'
+              }} "
+            >
+              {{ isBefore(data) ? "Invalid Ticket" : "Valid Ticket" }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="bg-blue-100 text-blue-900 font-semibold my-10 p-4 rounded-xl" >
+        <p>Need Help?</p>
+        <p>If you have any issues with your ticket, please contact our support team at maqbour.moh&#64;gmail.com</p>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #loading>
+  <div class="h-screen">
+    <fa-icon class="animate-spin" [icon]="faSpinner"></fa-icon>
+  </div>
+</ng-template>

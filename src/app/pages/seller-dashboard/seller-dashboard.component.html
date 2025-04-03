@@ -3,72 +3,123 @@
     <h1 class="font-bold text-3xl" >Seller Dashboard</h1>
     <p class="text-lg" >Manage your seller profile and payment settings</p>
   </div>
-  <div class="flex flex-col gap-8 px-8 py-10 border-b-2 border-gray-100" >
-    <h2 class="font-bold text-3xl" >Sell tickets for your events</h2>
-    <p class="text-gray-500 text-lg font-semibold" >List your tickets for sale and manage your listings</p>
-    <div class="flex rounded-lg drop-shadow-sm border-1 border-gray-200 items-center justify-center py-4 gap-4 mb-8" >
-      <button
-        class="flex bg-blue-700 text-gray-100 font-semibold gap-3 text-lg px-5 py-3 rounded-lg cursor-pointer"
-        (click)="goToCreateEvent()"
-      >
-        <fa-icon [icon]="faPlus" ></fa-icon>
-        <p>Create Event</p>
-      </button>
-      <button
-        class="flex bg-gray-100 text-gray-500 font-semibold gap-3 text-lg px-5 py-3 rounded-lg cursor-pointer"
-        (click)="goToMyEvents()"
-      >
-        <fa-icon [icon]="faCalendarDays" ></fa-icon>
-        <p>View My Events</p>
-      </button>
+  <ng-container *ngIf="!isLoading; else loading" >
+    <div
+      class="flex flex-col gap-8 px-8 my-10 border-b-2 border-gray-100"
+      *ngIf="!data.currentlyDue.length"
+    >
+      <h2 class="font-bold text-3xl" >Sell tickets for your events</h2>
+      <p class="text-gray-500 text-lg font-semibold" >List your tickets for sale and manage your listings</p>
+      <div class="flex flex-col sm:flex-row rounded-lg drop-shadow-sm border-1 border-gray-200 items-center justify-center py-4 gap-4 mb-8" >
+        <button
+          class="flex w-[90%] justify-center sm:w-fit bg-blue-700 text-gray-100 font-semibold gap-3 text-lg px-5 py-3 rounded-lg cursor-pointer"
+          (click)="goToCreateEvent()"
+        >
+          <fa-icon [icon]="faPlus" ></fa-icon>
+          <p>Create Event</p>
+        </button>
+        <button
+          class="flex w-[90%] justify-center sm:w-fit bg-gray-100 text-gray-500 font-semibold gap-3 text-lg px-5 py-3 rounded-lg cursor-pointer"
+          (click)="goToMyEvents()"
+        >
+          <fa-icon [icon]="faCalendarDays" ></fa-icon>
+          <p>View My Events</p>
+        </button>
+      </div>
     </div>
-  </div>
-  <div>
-    <div class="grid grid-cols-2 gap-4 px-8 mt-16" >
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 px-8 my-10" >
       <div class="bg-gray-50 pb-6 pt-5 pl-4 flex flex-col gap-2 rounded-xl" >
         <h3 class="font-semibold text-gray-500" >Account Status</h3>
         <div class="flex items-center gap-2" >
-          <fa-icon class="text-green-500" [icon]="faCircle" ></fa-icon>
-          <p class="text-xl font-bold" >Active</p>
+          <fa-icon
+            class="{{ !data.currentlyDue.length && (data.disabledReason === null) ? 'text-green-500' : 'text-yellow-500' }}"
+            [icon]="faCircle"
+          ></fa-icon>
+          <p class="text-xl font-bold" >
+            {{
+              !data.currentlyDue.length && (data.disabledReason === null)
+              ? 'Active'
+              : 'Pending Setup'
+            }}
+          </p>
         </div>
       </div>
       <div class="bg-gray-50 pb-6 pt-5 pl-4 flex flex-col gap-2 rounded-xl" >
         <h3 class="font-semibold text-gray-500" >Payment Capability</h3>
         <div class="flex items-center gap-2" >
-          <fa-icon class="text-green-500 text-xl" [icon]="faCircleCheck" ></fa-icon>
-          <p class="text-lg" >Can accept payments</p>
+          <fa-icon
+            class="{{ data.acceptPayments ? 'text-green-500' : 'text-yellow-500' }} text-xl"
+            [icon]="faCircleCheck"
+          ></fa-icon>
+          <p class="text-lg" >
+            {{
+              data.acceptPayments
+              ? 'Can accept payments'
+              : 'Pending accepting payments'
+            }}
+          </p>
         </div>
         <div class="flex items-center gap-2" >
-          <fa-icon class="text-green-500 text-xl" [icon]="faCircleCheck" ></fa-icon>
-          <p class="text-lg" >Can accept payments</p>
+          <fa-icon
+            class="{{ data.recievePayout ? 'text-green-500' : 'text-yellow-500' }} text-xl"
+            [icon]="faCircleCheck"
+          ></fa-icon>
+          <p class="text-lg" >
+            {{
+              data.recievePayout
+              ? 'Can recieve payouts'
+              : 'Pending receiving payouts'
+            }}
+          </p>
         </div>
       </div>
     </div>
-  </div>
-  <div class="bg-amber-50 p-4 flex flex-col gap-3 my-8 rounded-xl text-yellow-700 mx-8 m-auto" >
-    <h2 class="font-semibold" >Required Information</h2>
-    <p class="text-xl font-semibold" >Eventually Needed:</p>
-    <p class="font-medium px-4" >&bull;&nbsp; individual verification document</p>
-    <button
-      class="bg-yellow-600 text-gray-50 text-xl w-fit px-4 py-3 rounded-xl cursor-pointer"
-    
+    <div
+      class="bg-amber-50 p-4 flex flex-col gap-3 my-8 rounded-xl text-yellow-700 mx-8 m-auto"
+      *ngIf="data.currentlyDue.length"
     >
-      Complete Requirements
-    </button>
-  </div>
-  <div class="mx-8 m-auto flex gap-3" >
-    <button
-      class="flex items-center gap-3 bg-blue-700 text-gray-50 px-6 py-3 rounded-xl text-xl cursor-pointer"
-    
-    >
-      <fa-icon [icon]="faGauge" ></fa-icon>
-      <p class="font-normal" >Seller Dashboard</p>
-    </button>
-    <button
-      class="flex items-center gap-3 bg-gray-100 text-gray-600 px-6 py-3 rounded-xl text-xl font-semibold cursor-pointer"
-
-    >
-      Refresh Status
-    </button>
-  </div>
+      <h2 class="font-semibold" >Required Information</h2>
+      <p class="text-xl font-semibold" >Action Required:</p>
+      <div>
+        <ng-container *ngFor="let action of data.currentlyDue" >
+          <p class="font-medium px-4" >&bull;&nbsp; {{ action }}</p>
+        </ng-container>
+      </div>
+      <button
+        class="bg-yellow-600 text-gray-50 text-xl w-fit px-4 py-3 rounded-xl {{ loadingAccountLink ? 'cursor-not-allowed brightness-70' : 'cursor-pointer' }}"
+        [disabled]="loadingAccountLink"
+        (click)="getAccountLink()"
+      >
+        Complete Requirements
+      </button>
+    </div>
+    <div class="mx-8 m-auto flex flex-col sm:flex-row gap-3" >
+      <ng-container *ngIf="!data.currentlyDue.length" >
+        <button
+          class="flex items-center justify-center gap-3 bg-blue-700 text-gray-50 px-6 py-3 rounded-xl text-xl {{ loadingAccountLink ? 'cursor-not-allowed brightness-70' : 'cursor-pointer' }}"
+          [disabled]="loadingAccountLink"
+          (click)="goToSellerDashboard()"
+        >
+          <fa-icon [icon]="faGauge" ></fa-icon>
+          <p class="font-normal" >Seller Dashboard</p>
+        </button>
+      </ng-container>
+      <button
+        class="flex items-center justify-center gap-3 bg-gray-100 text-gray-600 px-6 py-3 rounded-xl text-xl font-semibold {{ loadingAccountLink ? 'cursor-not-allowed brightness-70' : 'cursor-pointer' }}"
+        [disabled]="loadingAccountLink"
+        (click)="refreshStatus()"
+      >
+        Refresh Status
+      </button>
+    </div>
+  </ng-container>
+  <ng-template #loading >
+    <div class="flex justify-center items-center pt-5" >
+      <fa-icon
+        class="animate-spin"
+        [icon]="faSpinner"
+        *ngIf="isLoading"
+      ></fa-icon>
+    </div>
+  </ng-template>
 </div>

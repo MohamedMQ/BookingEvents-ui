@@ -59,6 +59,7 @@ export class SingleEventComponent implements OnInit {
   isCanceling: boolean = true;
   queuePos: number = -1;
   imageUrl = environment.imageBaseUrl;
+  processingPayment = false;
 
   private eventService = inject(EventService);
   private ticketService = inject(TicketService);
@@ -75,7 +76,7 @@ export class SingleEventComponent implements OnInit {
       .subscribe(params => {
         let paramStr: string | null = params.get('eventId');
         this.eventId = Number(paramStr);
-        if (isUserExists) 
+        if (isUserExists)
           this.eventService
           .protectedEvent(this.eventId)
           .pipe(
@@ -85,11 +86,11 @@ export class SingleEventComponent implements OnInit {
           )
           .subscribe({
             next: (res) => {
-              console.log(res)
+              // console.log(res)
               this.data = res.data;
             },
             error: (err) => {
-              console.log(err);
+              // console.log(err);
               this.router.navigate(['/errorPage']);
             }
           })
@@ -103,11 +104,11 @@ export class SingleEventComponent implements OnInit {
             )
             .subscribe({
               next: (res) => {
-                console.log(res)
+                // console.log(res)
                 this.data = res.data;
               },
               error: (err) => {
-                console.log(err);
+                // console.log(err);
                 this.router.navigate(['/errorPage']);
               }
           })
@@ -139,7 +140,7 @@ export class SingleEventComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          console.log(res);
+          // console.log(res);
           if (res.message === "Ticket added successfully.")
             this.data.tickets.push(res.data);
           else {
@@ -147,7 +148,7 @@ export class SingleEventComponent implements OnInit {
           }
         },
         error: (err) => {
-          console.log("ERROR HAPPENED : ", err);
+          // console.log("ERROR HAPPENED : ", err);
         }
       })
   }
@@ -164,23 +165,24 @@ export class SingleEventComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          console.log("RESULT IS : ", res);
+          // console.log("RESULT IS : ", res);
           this.data.tickets = [];
         },
         error: (err) => {
-          console.log(err);
+          // console.log(err);
         }
       })
   }
 
   isBefore(item: any): boolean {
-    console.log(new Date(item.eventDateTime) < new Date());
+    // console.log(new Date(item.eventDateTime) < new Date());
     if (new Date(item.eventDateTime) < new Date())
       return true
     return false
   }
 
   processPayment() {
+    this.processingPayment = true;
     this.paymentService
       .initializePayment(this.data.tickets[0].id)
       .subscribe({
@@ -188,6 +190,7 @@ export class SingleEventComponent implements OnInit {
           this.redirectToCheckout(res.data.sessionId);
         },
         error: (err) => {
+          this.processingPayment = false;
           console.error('Error creating checkout session:', err);
         }
       })
@@ -195,15 +198,20 @@ export class SingleEventComponent implements OnInit {
 
   private async redirectToCheckout(sessionId: string) {
     try {
-      const stripe = await loadStripe('pk_test_51QyX2k2f0IUkWUsZuuIcH9RE0DGgOG5DGIWhAx390thJpkzniZIjQNAqZhKqA5NfF754CjuOFsBzOLBYgypSBiLV00r8vZQ6In');
-      if (!stripe)
+      const stripe = await loadStripe('pk_test_51R9Ptr4DbCH6QsC3nGqcCIvs3U1weOBdsEZWPyb3YDTP495mGsZDwR4X4y7FUSZ7416laUN8uQHQirusj4WzOqcL00ArQJh94x');
+      if (!stripe) {
+        this.processingPayment = false;
         throw new Error("Stripe.js failed to load.");
+      }
       const { error } = await stripe.redirectToCheckout({ sessionId: sessionId });
-      if (error)
+      if (error) {
+        this.processingPayment = false;
         console.error('Error redirecting to checkout:', error);
+      }
     } catch (error) {
       console.error('Error initializing Stripe Checkout:', error);
     } finally {
+      this.processingPayment = false;
     }
   }
 }

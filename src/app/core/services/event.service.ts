@@ -24,10 +24,14 @@ export class EventService {
     return this.apiService.get<any>(`/protected/events/me?page=${newPage}`);
   }
 
-  protectedEvent(eventIdOrformData: any): Observable<any> {    
+  protectedEvent(eventIdOrformData: any): Observable<any> {
     if (typeof eventIdOrformData === 'number')
       return this.apiService.get<any>(`/protected/events/${eventIdOrformData}`);
     return this.apiService.post<any>(`/protected/events`, eventIdOrformData);
+  }
+
+  deleteProtectedEvent(eventId: number): Observable<any> {
+    return this.apiService.delete<any>(`/protected/events/${eventId}`);
   }
 
   protectedEventPut(eventId: number, formData: any): Observable<any> {

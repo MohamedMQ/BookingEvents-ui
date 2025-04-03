@@ -18,9 +18,9 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class NavbarComponent {
   faMagnifyingGlass = faMagnifyingGlass;
-  
+
   @Output() showModal = new EventEmitter<boolean>();
-  
+
   private renderer = inject(Renderer2);
   private store = inject(Store);
   private router = inject(Router);
@@ -36,7 +36,7 @@ export class NavbarComponent {
     this.router.navigate(['/dashboard']);
   }
 
-  goToMyEvents(): void {
-    this.router.navigate(['/events/my-events']);
+  goToMyTickets(): void {
+    this.router.navigate(['/tickets/my-tickets']);
   }
 }

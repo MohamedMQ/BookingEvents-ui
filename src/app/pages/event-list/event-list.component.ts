@@ -63,7 +63,7 @@ export class EventListComponent implements OnInit {
             })
           ).subscribe({
             next: (response) => {
-              console.log(response, user);
+              // console.log(response, user);
               firstLoad ?
                 this.page = response.pagination.currentPage :
                 this.page = response.pagination.currentPage + 1;
@@ -72,7 +72,7 @@ export class EventListComponent implements OnInit {
               this.data = response.data;
             },
             error: (err) => {
-              console.log(err);
+              // console.log(err);
             }
           })
       else
@@ -84,7 +84,7 @@ export class EventListComponent implements OnInit {
             })
           ).subscribe({
             next: (response) => {
-              console.log(response);
+              // console.log(response);
               firstLoad ?
                 this.page = response.pagination.currentPage :
                 this.page = response.pagination.currentPage + 1;
@@ -93,7 +93,7 @@ export class EventListComponent implements OnInit {
               this.data = response.data;
             },
             error: (err) => {
-              console.log(err);
+              // console.log(err);
             }
           })
     })
@@ -108,7 +108,7 @@ export class EventListComponent implements OnInit {
   }
 
   isBefore(item: any): boolean {
-    console.log(new Date(item.eventDateTime) < new Date());
+    // console.log(new Date(item.eventDateTime) < new Date());
     if (new Date(item.eventDateTime) < new Date())
       return true
     return false

@@ -65,7 +65,7 @@ export class PaymentComponent {
     if (error) {
       console.error('Error:', error.message);
     } else if (paymentIntent.status === 'succeeded') {
-      console.log('Payment successful!', paymentIntent);
+      // console.log('Payment successful!', paymentIntent);
     }
   }
 

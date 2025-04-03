@@ -21,4 +21,16 @@ export class AuthService {
   protectedProfile(): Observable<any> {
     return this.apiService.get<any>(`/protected/auth/profile`);
   }
+
+  accountStatus(): Observable<any> {
+    return this.apiService.get<any>(`/protected/account/status`);
+  }
+
+  accountLink(): Observable<any> {
+    return this.apiService.get<any>(`/protected/account/link`);
+  }
+
+  dashboardLink(): Observable<any> {
+    return this.apiService.get<any>(`/protected/dashboard/link`);
+  }
 }

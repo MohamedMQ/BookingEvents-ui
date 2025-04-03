@@ -50,7 +50,7 @@ export class EventFormComponent implements OnInit {
 
   @Input() type!: string;
   @Input() eventId: any;
-  
+
   notUpdated = false;
   isSubmited = false;
   start: boolean = false;
@@ -87,7 +87,7 @@ export class EventFormComponent implements OnInit {
               .protectedEvent(this.eventId)
               .subscribe({
                 next: (res) => {
-                  console.log("update ", res);
+                  // console.log("update ", res);
                   this.form.controls['name'].setValue(res.data.name);
                   this.form.controls['description'].setValue(res.data.description);
                   this.form.controls['category'].setValue(res.data.category);
@@ -101,7 +101,7 @@ export class EventFormComponent implements OnInit {
                     this.form.controls['price'].disable();
                     this.form.controls['totalTickets'].setValidators([Validators.min(Number(res.data.totalTickets))]);
                     this.form.controls['totalTickets'].updateValueAndValidity();
-                  } 
+                  }
                   if (res.data.imageUrl) {
                     let imageName = res.data.imageUrl.slice(res.data.imageUrl.lastIndexOf('/') + 1);
                     if (imageName === "default.jpg") {
@@ -121,7 +121,7 @@ export class EventFormComponent implements OnInit {
                             this.isFetching = false;
                           },
                           error: (err) => {
-                            console.log(err);
+                            // console.log(err);
                           }
                         })
                     } else {
@@ -141,7 +141,7 @@ export class EventFormComponent implements OnInit {
                             this.isFetching = false;
                           },
                           error: (err) => {
-                            console.log(err);
+                            // console.log(err);
                           }
                         })
                     }
@@ -149,7 +149,7 @@ export class EventFormComponent implements OnInit {
                     this.isFetching = false;
                 },
                 error: (err) => {
-                  console.log(err);
+                  // console.log(err);
                   this.router.navigate(['/error']);
                 }
               })
@@ -244,7 +244,7 @@ export class EventFormComponent implements OnInit {
       input = event.nativeElement as HTMLInputElement;
     else
       input = event.target as HTMLInputElement;
-    console.log("FIIIILE ", input.files);
+    // console.log("FIIIILE ", input.files);
     if (input && input.files && input.files.length > 0) {
       const validImageTypes = [
         'image/jpeg',
@@ -258,7 +258,7 @@ export class EventFormComponent implements OnInit {
         this.fileName = URL.createObjectURL(file);
         this.form.controls['image']?.clearValidators();
       } else {
-        console.log('fdfdsfdfd');
+        // console.log('fdfdsfdfd');
         this.fileName = 'No file chosen';
         this.form.controls['image']?.setValidators([this.imageValidator]);
       }
@@ -276,7 +276,7 @@ export class EventFormComponent implements OnInit {
 
   onCreateOrUpdate() {
     this.isSubmited = true;
-    console.log(this.form);
+    // console.log(this.form);
     if (this.form.invalid) return;
     const formData = new FormData();
     formData.append('name', this.form.get('name')?.value);
@@ -286,10 +286,10 @@ export class EventFormComponent implements OnInit {
     formData.append('price', this.form.get('price')?.value);
     formData.append('totalTickets', this.form.get('totalTickets')?.value);
     const eventDateTime = this.form.get('eventDateTime')?.value;
-    const formattedDateTime = new Date(eventDateTime).toISOString().split('Z')[0]; 
-    console.log('Formatted Date Time:', formattedDateTime);
+    const formattedDateTime = new Date(eventDateTime).toISOString().split('Z')[0];
+    // console.log('Formatted Date Time:', formattedDateTime);
     formData.append('eventDateTime', formattedDateTime);
-  
+
     const image = this.form.get('image')?.value;
     if (image instanceof File) {
       formData.append('image', image, image.name);
@@ -300,7 +300,7 @@ export class EventFormComponent implements OnInit {
         .protectedEvent(formData)
         .subscribe({
           next: (res) => {
-            console.log(res);
+            // console.log(res);
             setTimeout(() => {
               this.router.navigate([`/events/${res.data.id}`]);
               this.isLoading = false;
@@ -308,7 +308,7 @@ export class EventFormComponent implements OnInit {
           },
           error: (err) => {
             this.isLoading = false;
-            console.log(err);
+            // console.log(err);
           }
         })
     else
@@ -316,7 +316,7 @@ export class EventFormComponent implements OnInit {
         .protectedEventPut(this.eventId, formData)
         .subscribe({
           next: (res) => {
-            console.log(res);
+            // console.log(res);
             setTimeout(() => {
               this.router.navigate([`/events/${res.data.id}`]);
               this.isLoading = false;
@@ -324,7 +324,7 @@ export class EventFormComponent implements OnInit {
           },
           error: (err) => {
             this.isLoading = false;
-            console.log(err);
+            // console.log(err);
           }
       })
   }
