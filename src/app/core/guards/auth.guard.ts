@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { inject } from '@angular/core';
 import { CanMatchFn, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -9,20 +10,20 @@ export const authGuard: CanMatchFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const store = inject(Store);
+  const toastrService = inject(ToastrService);
 
   return authService
     .protectedProfile()
     .pipe(
       tap(res => {
-        // console.log("SUCCESS AUTHENTICATING USER ", res);
         const {id, name, email} = res.data;
         const user = {id, name, email}
         store.dispatch(userAction({user}));
         return of(true);
       }),
       catchError((err) => {
-        // console.log("ERROR AUTHENTICATING USER ", err);
-        router.navigate(['/error']);
+        // toastrService.error("You are not authenticated", 'Error');
+        router.navigate(['/events']);
         return of(false);
       })
     )

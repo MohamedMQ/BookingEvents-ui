@@ -42,7 +42,7 @@ export class SellerDashboardComponent implements OnInit {
         },
         error: (err) => {
           this.toastrService.error(err.error.message, 'Error');
-          this.router.navigate(['/error']);
+          this.router.navigate(['/events']);
         }
       })
   }
@@ -66,7 +66,7 @@ export class SellerDashboardComponent implements OnInit {
         },
         error: (err) => {
           this.toastrService.error(err.error.message, 'Error');
-          this.router.navigate(['/error']);
+          // this.router.navigate(['/error']);
         }
       })
   }

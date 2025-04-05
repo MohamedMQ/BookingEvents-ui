@@ -62,13 +62,32 @@ export class EventFormComponent implements OnInit {
   private imageBaseUrl = environment.imageBaseUrl;
   userId$ = this.store.select(selectUserId);
 
-  musicCategories = [
-    { value: 'ROCK', label: 'Rock' },
-    { value: 'POP', label: 'Pop' },
-    { value: 'HIPHOP', label: 'Hip Hop' },
-    { value: 'JAZZ', label: 'Jazz' },
-    { value: 'CLASSICAL', label: 'Classical' },
-    { value: 'ELECTRONIC', label: 'Electronic' },
+  eventCategories = [
+    { value: 'MUSIC', label: 'Music' },
+    { value: 'ART', label: 'Art' },
+    { value: 'THEATER', label: 'Theater' },
+    { value: 'DANCE', label: 'Dance' },
+    { value: 'COMEDY', label: 'Comedy' },
+    { value: 'EDUCATION', label: 'Education' },
+    { value: 'WORKSHOP', label: 'Workshop' },
+    { value: 'CONFERENCE', label: 'Conference' },
+    { value: 'NETWORKING', label: 'Networking' },
+    { value: 'TECHNOLOGY', label: 'Technology' },
+    { value: 'GAMING', label: 'Gaming' },
+    { value: 'SPORTS', label: 'Sports' },
+    { value: 'FITNESS', label: 'Fitness' },
+    { value: 'WELLNESS', label: 'Wellness' },
+    { value: 'HEALTH', label: 'Health' },
+    { value: 'FOOD', label: 'Food' },
+    { value: 'DRINK', label: 'Drink' },
+    { value: 'TRAVEL', label: 'Travel' },
+    { value: 'CHARITY', label: 'Charity' },
+    { value: 'FASHION', label: 'Fashion' },
+    { value: 'CULTURE', label: 'Culture' },
+    { value: 'STARTUP', label: 'Startup' },
+    { value: 'BUSINESS', label: 'Business' },
+    { value: 'RELIGION', label: 'Religion' },
+    { value: 'COMMUNITY', label: 'Community' },
   ];
 
   createFileList(files: File[]): FileList {
@@ -151,7 +170,7 @@ export class EventFormComponent implements OnInit {
                 },
                 error: (err) => {
                   this.toastrService.error(err.error.message, 'Error');
-                  this.router.navigate(['/error']);
+                  this.router.navigate(['/events']);
                 }
               })
           })
@@ -276,6 +295,8 @@ export class EventFormComponent implements OnInit {
   onCreateOrUpdate() {
     this.isSubmited = true;
     if (this.form.invalid) return;
+    console.log(this.form);
+
     const formData = new FormData();
     formData.append('name', this.form.get('name')?.value);
     formData.append('description', this.form.get('description')?.value);

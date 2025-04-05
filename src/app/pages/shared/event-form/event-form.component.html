@@ -23,7 +23,7 @@
     (ngSubmit)="onCreateOrUpdate()"
   >
     <div
-      class="flex gap-2 bg-yellow-50 text-yellow-700 border-1 border-yellow-200 rounded-xl p-6 font-medium"        
+      class="flex gap-2 bg-yellow-50 text-yellow-700 border-1 border-yellow-200 rounded-xl p-6 font-medium"
       *ngIf="(type === 'update' && this.form.controls['price'].disabled)"
     >
       <fa-icon
@@ -227,7 +227,7 @@
           >
             <option value="">Select a category</option>
             <option
-              *ngFor="let category of musicCategories"
+              *ngFor="let category of eventCategories"
               [value]="category.value"
             >
               {{ category.label }}

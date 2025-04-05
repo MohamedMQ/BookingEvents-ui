@@ -1,15 +1,42 @@
 import { ToastrService } from 'ngx-toastr';
-import { Component, inject } from '@angular/core';
-import { faArrowLeft, faArrowLeftLong, faArrowRightLong, faCalendarDays, faCircleNotch, faCircleXmark, faDownload, faIdCard, faLocationDot, faShareNodes, faSpinner, faTicket, faUser, faUserGroup } from '@fortawesome/free-solid-svg-icons';
+import {
+  Component,
+  inject
+} from '@angular/core';
+import {
+  faArrowLeft,
+  faArrowLeftLong,
+  faCalendarDays,
+  faCaretUp,
+  faCircleNotch,
+  faCircleXmark,
+  faDownload,
+  faIdCard,
+  faLocationDot,
+  faShareNodes,
+  faSpinner,
+  faTicket,
+  faUser,
+  faUserGroup
+} from '@fortawesome/free-solid-svg-icons';
 import { environment } from '../../../environments/environment.development';
 import { TicketService } from '../../core/services/ticket.service';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterModule
+} from '@angular/router';
 import { finalize } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HttpClient } from '@angular/common/http';
+import {
+  FileSaverModule,
+  FileSaverService
+} from 'ngx-filesaver';
+import { ShareButtons } from 'ngx-sharebuttons/buttons'
 
-import { FileSaverModule, FileSaverService } from 'ngx-filesaver';
+// import { ShareIconsModule } from 'ngx-sharebuttons/icons'
 
 @Component({
   selector: 'app-single-ticket',
@@ -18,7 +45,8 @@ import { FileSaverModule, FileSaverService } from 'ngx-filesaver';
     RouterModule,
     FontAwesomeModule,
     RouterModule,
-    FileSaverModule
+    FileSaverModule,
+    ShareButtons
   ],
   templateUrl: './single-ticket.component.html',
   styleUrl: './single-ticket.component.css'
@@ -37,6 +65,7 @@ export class SingleTicketComponent {
   faDownload = faDownload;
   faShareNodes = faShareNodes;
   faArrowLeft = faArrowLeft;
+  faCaretUp = faCaretUp;
 
   private ticketId: number = 0;
   data: any = [];
@@ -45,7 +74,8 @@ export class SingleTicketComponent {
   isCanceling: boolean = true;
   queuePos: number = -1;
   imageUrl = environment.imageBaseUrl;
-  processingPayment = false;
+  downloadingOrSharing: boolean = false;
+  shareOpened: boolean = false;
 
   private ticketService = inject(TicketService);
   private route = inject(ActivatedRoute);
@@ -75,7 +105,7 @@ export class SingleTicketComponent {
           },
           error: (err) => {
             this.toastrService.error(err.error.message, 'Error');
-            this.router.navigate(['/errorPage']);
+            this.router.navigate(['/events']);
           }
         })
       })
@@ -91,11 +121,15 @@ export class SingleTicketComponent {
     return false
   }
 
-  downloadPdf() {
-    // /protected/tickets/{ticketId}/download/pdf
+  downloadTicketPdf(): void {
+    this.downloadingOrSharing = true
     this.http.get(`http://localhost:8080/api/protected/tickets/${this.data.tickets[0].id}/download/pdf`, {
       responseType: 'blob'
-    }).subscribe({
+    }).pipe(
+      finalize(() => {
+        this.downloadingOrSharing = false
+      })
+    ).subscribe({
       next: (blob) => {
         this.filesaverService.save(blob, 'ticket.pdf');
       },
@@ -103,9 +137,13 @@ export class SingleTicketComponent {
         this.toastrService.error("Something went wrong, try again !!", "Error");
       }
     })
+  }
 
-    //   blob => {
-    //   this.filesaverService.save(blob, 'ticket.pdf');
-    // });
+  sharedStatus(): void {
+    this.shareOpened = !this.shareOpened;
+  }
+
+  getShareUrl(data: any): string {
+    return `http://localhost:3000/events/${data.id}`;
   }
 }

@@ -13,19 +13,34 @@
         </button>
         <div class="flex gap-10 font-semibold" >
           <button
-            class="flex gap-2 cursor-pointer"
-            (click)="downloadPdf()"
+            class="flex gap-2 {{ downloadingOrSharing ? 'cursor-not-allowed' : 'cursor-pointer' }}"
+            (click)="downloadTicketPdf()"
+            [disabled]="downloadingOrSharing"
           >
             <fa-icon [icon]="faDownload" ></fa-icon>
             <p>Save</p>
           </button>
-          <button
-            class="flex gap-2 cursor-pointer"
-
-          >
-            <fa-icon [icon]="faShareNodes" ></fa-icon>
-            <p>Share</p>
-          </button>
+          <div class="relative" >
+            <button
+              class="flex gap-2 {{ downloadingOrSharing ? 'cursor-not-allowed' : 'cursor-pointer' }}"
+              (click)="sharedStatus()"
+              [disabled]="downloadingOrSharing"
+            >
+              <fa-icon [icon]="faShareNodes" ></fa-icon>
+              <p>Share</p>
+            </button>
+            <div
+              class="absolute bg-gray-100 w-60 right-0 transition-all duration-500 ease-in-out"
+              *ngIf="shareOpened"
+            >
+              <share-buttons
+                class="sb-moon-theme"
+                theme="moon"
+                [include]="['copy', 'facebook', 'email', 'messenger', 'linkedin', 'whatsapp']"
+                [url]="getShareUrl(data)"
+                ></share-buttons>
+            </div>
+          </div>
         </div>
       </div>
       <div class="bg-gray-50 my-10 p-6 shadow-lg rounded-xl" >
@@ -88,7 +103,7 @@
                 <fa-icon class="text-blue-500" [icon]="faTicket"></fa-icon>
                 <div class="flex flex-col">
                   <p class="text-gray-500 text-sm">Ticket Price</p>
-                  <p>${{ data.price }}.00</p>
+                  <p>${{ data.price }}</p>
                 </div>
               </div>
             </div>

@@ -13,6 +13,8 @@ import { searchReducer } from './store/reducers/search.reducer';
 
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { provideShareButtonsOptions } from 'ngx-sharebuttons';
+import { shareIcons } from 'ngx-sharebuttons/icons';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,6 +38,9 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-center-custom',
       preventDuplicates: true,
     }),
+    provideShareButtonsOptions(
+      shareIcons()
+    )
   ],
 };
 

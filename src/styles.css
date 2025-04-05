@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import 'ngx-toastr/toastr';
+
 /* @import 'ngx-toastr/toastr'; */
 
 body {
@@ -15,4 +16,41 @@ body {
   top: 2rem !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
+}
+
+.sb-moon-theme {
+  background-color: white !important;
+  border: 2px oklch(92.8% 0.006 264.531) solid;
+  border-radius: 10px;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  width: 100% !important;
+  height: 130px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 5px;
+}
+
+.sb-moon-theme .sb-moon {
+  width: fit-content !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 15px;
+}
+
+.sb-moon-theme .sb-wrapper .sb-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.sb-moon-theme .sb-wrapper .sb-content .sb-icon {
+  background-color: oklch(55.1% 0.027 264.364);
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }

@@ -93,7 +93,7 @@ export class SingleEventComponent implements OnInit {
             },
             error: (err) => {
               this.toastrService.error(err.error.message, 'Error');
-              this.router.navigate(['/errorPage']);
+              this.router.navigate(['/events']);
             }
           })
         else
@@ -110,7 +110,7 @@ export class SingleEventComponent implements OnInit {
               },
               error: (err) => {
                 this.toastrService.error(err.error.message, 'Error');
-                this.router.navigate(['/errorPage']);
+                this.router.navigate(['/events']);
               }
           })
       })
