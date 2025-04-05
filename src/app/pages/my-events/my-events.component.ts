@@ -7,6 +7,7 @@ import { finalize } from 'rxjs';
 import { EventService } from '../../core/services/event.service';
 import { environment } from '../../../environments/environment.development';
 import { Router, RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-my-events',
@@ -40,6 +41,7 @@ export class MyEventsComponent {
   private eventService = inject(EventService);
   private router = inject(Router);
   private location = inject(Location);
+  private toastrService = inject(ToastrService);
 
   loadEvents(pageNum: number, firstLoad: boolean) {
     this.eventService
@@ -59,7 +61,7 @@ export class MyEventsComponent {
           this.data = response.data;
         },
         error: (err) => {
-          // console.log(err);
+          this.toastrService.error(err.error.message, 'Error');
         }
       })
   }
@@ -73,7 +75,6 @@ export class MyEventsComponent {
   }
 
   isBefore(item: any): boolean {
-    // console.log(new Date(item.eventDateTime) < new Date());
     if (new Date(item.eventDateTime) < new Date())
       return true
     return false
@@ -98,12 +99,12 @@ export class MyEventsComponent {
       .subscribe({
         next: (res) => {
           item.eventStatus = res.data.eventStatus;
-          console.log(item);
           this.LoadingCanceling = true;
+          this.toastrService.success(res.message, 'Success');
         },
         error: (err) => {
-          console.log(err);
           this.LoadingCanceling = true;
+          this.toastrService.error(err.error.message, 'Error');
         }
       })
   }

@@ -94,11 +94,21 @@
                     {{ data.name }}
                   </h1>
                 </div>
-                <p
-                  class="text-lg font-bold text-green-700 bg-green-50 p-[5px] rounded-lg"
-                >
-                  ${{ data.price }}
-                </p>
+                <div class="flex flex-col gap-2" >
+                  <p
+                    class=" self-end font-bold text-green-700 bg-green-50  px-4 py-1 rounded-2xl"
+                  >
+                    ${{ data.price }}
+                  </p>
+                  <p
+                    class="self-end font-bold text-red-800 bg-red-50 px-4 py-1 rounded-2xl"
+                    *ngIf="
+                      !data.availableTickets
+                    "
+                  >
+                    Sold out
+                  </p>
+                </div>
               </div>
               <ng-template #notOwner>
                 <div class="flex flex-col justify-between items-start gap-2">
@@ -364,13 +374,6 @@
                     <p class="text-gray-500 text-sm">{{ data.user.email }}</p>
                   </div>
                 </div>
-                <!-- <div class="flex items-center gap-4 py-2 rounded-2xl">
-                  <fa-icon class="text-blue-500" [icon]="faIdCard"></fa-icon>
-                  <div class="flex flex-col">
-                    <p class=" text-gray-500 text-sm" >Ticket Holder ID</p>
-                    <p class="break-all" >user_fdjsfjhsdfkjdshfjkhdjsfjksdhffdfd</p>
-                  </div>
-                </div> -->
                 <div class="flex items-center gap-4 py-2 rounded-2xl">
                   <fa-icon class="text-blue-500" [icon]="faTicket"></fa-icon>
                   <div class="flex flex-col">

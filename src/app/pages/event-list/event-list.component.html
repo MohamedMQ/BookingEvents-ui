@@ -1,5 +1,8 @@
 <div class="max-w-[1440px] m-auto p-8 cursor-default">
-  <div class="flex justify-between mt-16 mb-8 items-center">
+  <div
+    class="flex justify-between mt-16 mb-8 items-center"
+    *ngIf="!searchTerm.length"
+  >
     <div class="leading-[50px]">
       <h1 class="text-4xl font-bold">Upcoming Events</h1>
       <p class="text-[20px] text-gray-500">
@@ -16,6 +19,19 @@
       <p class="text-gray-500 font-bold">{{ totalItems }} Upcoming Events</p>
     </div>
   </div>
+  <div
+    class="justify-between mt-16 mb-8 items-center text-gray-500"
+    *ngIf="searchTerm.length"
+  >
+    <div class="leading-[50px] flex items-center gap-4 text-2xl" >
+      <fa-icon [icon]="faMagnifyingGlass" ></fa-icon>
+      <div class="flex flex-col gap-1" >
+        <h2 class="text-3xl font-bold text-black" >Search Results for "{{ searchTerm }}"</h2>
+        <p class="text-lg" >Found {{ totalItems }} events</p>
+      </div>
+    </div>
+    <h2 class="text-2xl font-bold text-black mt-8" >Upcoming Events</h2>
+  </div>
   <div class="grid lg:grid-cols-3 gap-8 sm:grid-cols-1 md:grid-cols-2">
     <div
       class="rounded-xl shadow-lg h-auto transition-transform transform hover:scale-105 duration-500 cursor-default bg-gray-50"
@@ -23,7 +39,6 @@
         let item of data
           | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }
       "
-      [routerLink]="'/events/' + item.id"
     >
       <ng-container
         *ngIf="user$ | async as user"
@@ -32,6 +47,7 @@
           class="h-60 w-[100%] rounded-t-xl object-cover {{ (item.tickets.length && item.tickets[0].status === 'CONFIRMED') ? 'brightness-40' : '' }}"
           [src]="imageUrl + item.imageUrl"
           alt="sorry"
+          [routerLink]="'/events/' + item.id"
         />
         <div class="px-10 p-6">
           <div
@@ -41,29 +57,52 @@
             <div class="flex flex-col gap-2">
               <div
                 class="flex bg-blue-600 text-white rounded-2xl items-center justify-center py-1 px-3 gap-1"
+                *ngIf="item.user.id === user.id"
               >
-                <fa-icon [icon]="faStar" class="text-sm"></fa-icon>
+                <fa-icon [icon]="faCalendarDays" class="text-sm"></fa-icon>
                 <p class="text-sm">Your Event</p>
               </div>
               <h1 class="text-3xl font-bold w-[70%] capitalize">
                 {{ item.name }}
               </h1>
             </div>
-            <p
-              class="text-lg font-bold text-green-700 bg-green-50 p-[5px] rounded-lg"
-            >
-              ${{ item.price }}
-            </p>
-          </div>
-          <ng-template #notOwner>
-            <div class="flex justify-between items-start">
-              <h1 class="text-3xl font-bold w-[70%] capitalize">
-                {{ item.name }}
-              </h1>
+            <div class="flex flex-col gap-2" >
               <p
-                class="text-lg font-bold text-green-700 bg-green-50 p-[5px] rounded-lg"
+                class=" self-end font-bold text-green-700 bg-green-50  px-4 py-1 rounded-2xl"
               >
                 ${{ item.price }}
+              </p>
+              <p
+                class="self-end font-bold text-red-800 bg-red-50 px-4 py-1 rounded-2xl"
+                *ngIf="
+                  !item.availableTickets
+                "
+              >
+                Sold out
+              </p>
+            </div>
+          </div>
+          <ng-template #notOwner>
+            <div class="flex flex-col justify-between items-start gap-2">
+              <div class="w-full flex justify-between items-start">
+                <h1 class="text-3xl font-bold w-[70%] capitalize">
+                  {{ item.name }}
+                </h1>
+                <p
+                  class="text-lg font-bold text-green-700 bg-green-50 px-4 py-1 rounded-2xl"
+                >
+                  ${{ item.price }}.00
+                </p>
+              </div>
+              <p
+                class="self-end font-bold text-red-800 bg-red-50 px-4 py-1 rounded-2xl"
+                *ngIf="
+                  user.id &&
+                  item.user.id !== user.id &&
+                  !item.availableTickets
+                "
+              >
+                Sold out
               </p>
             </div>
           </ng-template>
@@ -113,7 +152,19 @@
             </div>
           </button>
           <button
+            class="flex gap-2 bg-blue-200 w-[100%] items-center justify-center py-5 rounded-2xl mt-6 cursor-pointer"
+            [routerLink]="'/tickets/' + item.tickets[0].id"
+            *ngIf="(item.tickets.length && item.tickets[0].status === 'CONFIRMED')"
+          >
+            <p class="text-blue-700 font-bold">Check your Ticket for this event</p>
+            <fa-icon
+              [icon]="faArrowRightLong"
+              class="text-blue-700 font-bold"
+            ></fa-icon>
+          </button>
+          <button
             class="flex gap-2 bg-gray-200 w-[100%] items-center justify-center py-5 rounded-2xl mt-6 cursor-pointer"
+            [routerLink]="'/events/update/' + item.id"
             *ngIf="(user.id && item.user.id === user.id && !isBefore(data))"
           >
             <fa-icon
@@ -147,12 +198,14 @@
             </div>
             <button
               class="flex items-center justify-center mx-5 p-4 text-white gap-1 rounded-lg bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-600 cursor-pointer"
+              [routerLink]="'/events/' + item.id"
             >
               <p class="font-bold text-lg">Purchase Your Ticket Now</p>
               <fa-icon [icon]="faArrowRightLong"></fa-icon>
             </button>
             <button
               class="flex items-center justify-center mx-5 p-2 rounded-lg bg-pink-100 gap-2 text-red-700 my-5 cursor-pointer"
+              [routerLink]="'/events/' + item.id"
             >
               <fa-icon class="text-red-700" [icon]="faCircleXmark"></fa-icon>
               <p class="font-medium text-lg">Release Ticket Offer</p>
@@ -169,8 +222,24 @@
     ></pagination-controls>
   </div>
   <ng-template #isLoadingOrEvents >
-    <p class="text-center font-semibold text-2xl my-20" >
-      {{ !isLoading ? "No Events Found For The Moment &nbsp;😥" : "" }}
-    </p>
+    <div
+      class="flex flex-col text-center my-20 text-gray-500"
+      *ngIf="(!isLoading && searchTerm === '')"
+    >
+      <fa-icon class=" font-semibold text-5xl" [icon]="faCalendarDays" ></fa-icon>
+      <div class="flex flex-col gap-2 my-4" >
+        <p class="text-xl text-black" >No events yet</p>
+        <p>When there are events, they'll appear here</p>
+      </div>
+    </div>
+    <div
+      class="flex flex-col text-center my-20 text-gray-500"
+      *ngIf="(!isLoading && searchTerm !== '')"
+    >
+      <fa-icon class=" font-semibold text-5xl" [icon]="faCalendarDays" ></fa-icon>
+      <div class="flex flex-col gap-2 my-4" >
+        <p class="text-xl text-black" >No events exists with the given keyword</p>
+      </div>
+    </div>
   </ng-template>
 </div>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'ngx-toastr/toastr';
 /* @import 'ngx-toastr/toastr'; */
 
 body {
@@ -8,4 +9,10 @@ body {
 .overflow-hidden {
   overflow: hidden;
   position: relative;
+}
+
+.toast-top-center-custom {
+  top: 2rem !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
 }

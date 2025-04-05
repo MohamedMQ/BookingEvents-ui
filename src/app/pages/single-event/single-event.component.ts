@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -60,6 +61,7 @@ export class SingleEventComponent implements OnInit {
   queuePos: number = -1;
   imageUrl = environment.imageBaseUrl;
   processingPayment = false;
+  private stripeSharedKey = environment.stripeSharedKey;
 
   private eventService = inject(EventService);
   private ticketService = inject(TicketService);
@@ -67,6 +69,7 @@ export class SingleEventComponent implements OnInit {
   private store = inject(Store);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private toastrService = inject(ToastrService);
 
   user$ = this.store.select(selectUserFeature);
 
@@ -86,11 +89,10 @@ export class SingleEventComponent implements OnInit {
           )
           .subscribe({
             next: (res) => {
-              // console.log(res)
               this.data = res.data;
             },
             error: (err) => {
-              // console.log(err);
+              this.toastrService.error(err.error.message, 'Error');
               this.router.navigate(['/errorPage']);
             }
           })
@@ -104,11 +106,10 @@ export class SingleEventComponent implements OnInit {
             )
             .subscribe({
               next: (res) => {
-                // console.log(res)
                 this.data = res.data;
               },
               error: (err) => {
-                // console.log(err);
+                this.toastrService.error(err.error.message, 'Error');
                 this.router.navigate(['/errorPage']);
               }
           })
@@ -140,15 +141,15 @@ export class SingleEventComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          // console.log(res);
           if (res.message === "Ticket added successfully.")
             this.data.tickets.push(res.data);
           else {
             this.data.tickets[0] = res.data;
           }
+          this.toastrService.success(res.message, 'Success');
         },
         error: (err) => {
-          // console.log("ERROR HAPPENED : ", err);
+          this.toastrService.error(err.error.message, 'Error');
         }
       })
   }
@@ -165,17 +166,16 @@ export class SingleEventComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          // console.log("RESULT IS : ", res);
           this.data.tickets = [];
+          this.toastrService.success(res.message, 'Success');
         },
         error: (err) => {
-          // console.log(err);
+          this.toastrService.error(err.error.message, 'Error');
         }
       })
   }
 
   isBefore(item: any): boolean {
-    // console.log(new Date(item.eventDateTime) < new Date());
     if (new Date(item.eventDateTime) < new Date())
       return true
     return false
@@ -191,25 +191,27 @@ export class SingleEventComponent implements OnInit {
         },
         error: (err) => {
           this.processingPayment = false;
-          console.error('Error creating checkout session:', err);
+          this.toastrService.error(err.error.message, 'Error');
         }
       })
   }
 
   private async redirectToCheckout(sessionId: string) {
     try {
-      const stripe = await loadStripe('pk_test_51R9Ptr4DbCH6QsC3nGqcCIvs3U1weOBdsEZWPyb3YDTP495mGsZDwR4X4y7FUSZ7416laUN8uQHQirusj4WzOqcL00ArQJh94x');
+      const stripe = await loadStripe(this.stripeSharedKey);
       if (!stripe) {
         this.processingPayment = false;
+        this.toastrService.error("Stripe.js failed to load.", 'Error');
         throw new Error("Stripe.js failed to load.");
       }
       const { error } = await stripe.redirectToCheckout({ sessionId: sessionId });
       if (error) {
         this.processingPayment = false;
-        console.error('Error redirecting to checkout:', error);
+        this.toastrService.error("Error redirecting to checkout", 'Error');
       }
     } catch (error) {
       console.error('Error initializing Stripe Checkout:', error);
+      this.toastrService.error("Error initializing Stripe Checkout", 'Error');
     } finally {
       this.processingPayment = false;
     }

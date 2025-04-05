@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -34,6 +35,7 @@ export class MyTicketsComponent {
 
   private store = inject(Store);
   private ticketService = inject(TicketService);
+  private toastrService = inject(ToastrService);
 
   user$ = this.store.select(selectUserFeature);
 
@@ -47,7 +49,6 @@ export class MyTicketsComponent {
       )
       .subscribe({
         next: (response) => {
-          // console.log(response);
           firstLoad
             ? (this.page = response.pagination.currentPage)
             : (this.page = response.pagination.currentPage + 1);
@@ -56,7 +57,7 @@ export class MyTicketsComponent {
           this.data = response.data;
         },
         error: (err) => {
-          // console.log(err);
+          this.toastrService.error(err.error.message, 'Error');
         },
       });
   }
@@ -70,7 +71,6 @@ export class MyTicketsComponent {
   }
 
   isBefore(item: any): boolean {
-    // console.log(new Date(item.eventDateTime) < new Date());
     if (new Date(item.eventDateTime) < new Date()) return true;
     return false;
   }

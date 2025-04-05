@@ -9,6 +9,10 @@ import { provideState, provideStore } from '@ngrx/store';
 import { userReducer } from './store/reducers/user.reducer';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { searchReducer } from './store/reducers/search.reducer';
+
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +22,7 @@ export const appConfig: ApplicationConfig = {
     // provideStore(),
     provideStore(),
     provideState({ name: 'user', reducer: userReducer }),
+    provideState({ name: 'search', reducer: searchReducer }),
     provideStoreDevtools({
       maxAge: 25, // Retains last 25 states
       logOnly: !isDevMode(), // Restrict extension to log-only mode
@@ -25,7 +30,12 @@ export const appConfig: ApplicationConfig = {
       trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
       connectInZone: true // If set to true, the connection is established within the Angular zone
-    })
+    }),
+    provideAnimations(),
+    provideToastr({
+      positionClass: 'toast-top-center-custom',
+      preventDuplicates: true,
+    }),
   ],
 };
 

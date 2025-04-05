@@ -28,6 +28,7 @@ export class AppComponent implements OnInit {
   isLoading: boolean = true;
 
   showModal: boolean = false;
+  searchTerm: string = "";
 
   ngOnInit(): void {
     this.router.events.subscribe((event) => {

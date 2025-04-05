@@ -1,3 +1,4 @@
+import { ToastrService } from 'ngx-toastr';
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { faPlus, faCalendarDays, faCircle, faCircleCheck, faGauge, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -29,6 +30,7 @@ export class SellerDashboardComponent implements OnInit {
 
   private router = inject(Router);
   private authService = inject(AuthService);
+  private toastrService = inject(ToastrService);
 
   ngOnInit(): void {
     this.authService
@@ -39,6 +41,7 @@ export class SellerDashboardComponent implements OnInit {
           this.isLoading = false;
         },
         error: (err) => {
+          this.toastrService.error(err.error.message, 'Error');
           this.router.navigate(['/error']);
         }
       })
@@ -62,6 +65,7 @@ export class SellerDashboardComponent implements OnInit {
           this.loadingAccountLink = false;
         },
         error: (err) => {
+          this.toastrService.error(err.error.message, 'Error');
           this.router.navigate(['/error']);
         }
       })
@@ -78,6 +82,7 @@ export class SellerDashboardComponent implements OnInit {
           }
         },
         error: (err) => {
+          this.toastrService.error(err.error.message, 'Error');
           this.loadingAccountLink = false;
         }
       })
@@ -94,6 +99,7 @@ export class SellerDashboardComponent implements OnInit {
           }
         },
         error: (err) => {
+          this.toastrService.error(err.error.message, 'Error');
           this.loadingAccountLink = false;
         }
       })

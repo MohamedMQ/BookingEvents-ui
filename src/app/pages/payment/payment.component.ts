@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { loadStripe } from '@stripe/stripe-js';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-payment',
@@ -16,11 +17,12 @@ export class PaymentComponent {
   cardCvc: any;
   clientSecret: string | null = null;
 
-  // Inject HttpClient directly
   private http = inject(HttpClient);
 
+  private stripeSharedKey: string = environment.stripeSharedKey;
+
   ngOnInit(): void {
-    loadStripe('pk_test_51QyX2k2f0IUkWUsZuuIcH9RE0DGgOG5DGIWhAx390thJpkzniZIjQNAqZhKqA5NfF754CjuOFsBzOLBYgypSBiLV00r8vZQ6In').then((stripe) => {
+    loadStripe(this.stripeSharedKey).then((stripe) => {
       this.stripe = stripe;
       this.elements = this.stripe.elements();
 

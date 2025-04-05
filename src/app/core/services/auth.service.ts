@@ -33,4 +33,8 @@ export class AuthService {
   dashboardLink(): Observable<any> {
     return this.apiService.get<any>(`/protected/dashboard/link`);
   }
+
+  protectedLogout(): Observable<any> {
+    return this.apiService.get<any>(`/protected/auth/logout`);
+  }
 }

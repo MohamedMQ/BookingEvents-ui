@@ -8,16 +8,16 @@ import { Observable } from 'rxjs';
 export class EventService {
   private apiService = inject(ApiService);
 
-  publicEvents(newPage: number = 0): Observable<any> {
-    return this.apiService.get<any>(`/public/events?page=${newPage}`);
+  publicEvents(newPage: number = 0, searchTerm: string): Observable<any> {
+    return this.apiService.get<any>(`/public/events?page=${newPage}&searchTerm=${searchTerm}`);
   }
 
   publicEvent(eventId: number): Observable<any> {
     return this.apiService.get<any>(`/public/events/${eventId}`);
   }
 
-  protectedEvents(newPage: number = 0): Observable<any> {
-    return this.apiService.get<any>(`/protected/events?page=${newPage}`);
+  protectedEvents(newPage: number = 0, searchTerm: string): Observable<any> {
+    return this.apiService.get<any>(`/protected/events?page=${newPage}&searchTerm=${searchTerm}`);
   }
 
   protectedEventsOwn(newPage: number = 0): Observable<any> {

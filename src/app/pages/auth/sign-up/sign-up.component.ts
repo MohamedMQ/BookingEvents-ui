@@ -10,6 +10,7 @@ import {
 import { AuthService } from '../../../core/services/auth.service';
 import { finalize } from 'rxjs';
 import { InputFocusDirective } from '../../../core/directives/input-focus.directive';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sign-up',
@@ -33,6 +34,7 @@ export class SignUpComponent {
 
   private authService = inject(AuthService);
   private rb = inject(FormBuilder);
+  private toastrService = inject(ToastrService);
 
   form: FormGroup = this.rb.group({
     name: [
@@ -65,13 +67,12 @@ export class SignUpComponent {
         })
       )
       .subscribe({
-        next: (response) => {
-          // console.log('User registered successfully' + response);
+        next: (res) => {
+          this.toastrService.success(res.message, 'Success');
           this.tabChange.emit('signin');
         },
         error: (err) => {
-          // console.log('Registed failed' + err);
-          this.errorMessage = 'registration failed, pleaese try again';
+          this.toastrService.error(err.error.message, 'Error');
         },
       });
   }

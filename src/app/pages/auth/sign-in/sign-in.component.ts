@@ -18,6 +18,7 @@ import { finalize } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { userAction } from '../../../store/actions/user.action';
 import { InputFocusDirective } from '../../../core/directives/input-focus.directive';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sign-in',
@@ -42,6 +43,7 @@ export class SignInComponent {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
   private store = inject(Store);
+  private toastrService = inject(ToastrService);
 
   form: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -71,18 +73,18 @@ export class SignInComponent {
         })
       )
       .subscribe({
-        next: (response) => {
+        next: (res) => {
           // console.log('User logged successfully' + this.store.user.id);
           // this.store.updateUser(response.data);
           // console.log('User logged successfully' + this.store.user.id);
-
-          let user = response.data;
+          // this.toastrService.success("you logged in successfully")
+          this.toastrService.success(res.message, 'Success');
+          let user = res.data;
           this.store.dispatch(userAction({ user }));
           this.hideModal.emit();
         },
         error: (err) => {
-          // console.log('loging failed' + err);
-          this.errorMessage = 'login failed, pleaese try again';
+          this.toastrService.error(err.error.message, 'Error');
         },
       });
   }
