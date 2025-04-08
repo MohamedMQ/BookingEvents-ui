@@ -1,59 +1,58 @@
-# BookingEventsUi
+# Event Ticketing System
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
+Welcome to the **Event Ticketing System** project, a comprehensive event management platform where users can buy tickets and event organizers (sellers) can create and sell tickets for their events. This platform uses cutting-edge technologies like Java, Spring Boot, Angular, Stripe, and TailwindCSS to provide a seamless and intuitive user experience.
 
-## Development server
+## Major Features
 
-To start a local development server, run:
+- **Backend Framework (Spring Boot):**  
+  The project is powered by Spring Boot, providing a secure, robust, and scalable backend infrastructure for managing events, users, and transactions.
 
-```bash
-ng serve
-```
+- **User Management & Authentication:**  
+  We have implemented a comprehensive user management system, allowing users to register, log in, and securely manage their profiles. Authentication is powered by JWT for secure sessions.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Stripe Integration for Payments:**  
+  Integrated with Stripe to handle secure online payments, allowing users to buy tickets for events and sellers to receive payments for their tickets effortlessly.
 
-## Code scaffolding
+- **Event Creation & Management (Seller Features):**  
+  Event organizers (sellers) can create and manage events, set ticket prices, and track ticket sales in real-time.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Ticket Purchase System:**  
+  Users can browse events, select tickets, and complete purchases securely through Stripe. The system ensures a smooth and hassle-free buying experience.
 
-```bash
-ng generate component component-name
-```
+- **Real-Time Ticket Availability:**  (Coming soon)
+  Stay updated with real-time ticket availability as users purchase tickets for events. The system automatically updates ticket counts to prevent overselling.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- **Order History:**  
+  Users can view their purchase history, including ticket details, dates, and event information. Sellers can also view a list of all their ticket sales.
 
-```bash
-ng generate --help
-```
+- **Email Notifications:**  (Coming soon)
+  Automated email notifications are sent to both buyers and sellers for ticket confirmations, event updates, and payment receipts.
 
-## Building
+## Minor Features
 
-To build the project run:
+- **Frontend Framework (Angular):**  
+  The frontend is built with Angular, providing a dynamic and responsive user interface for a smooth and engaging experience.
 
-```bash
-ng build
-```
+- **Stylish UI (TailwindCSS):**  
+  We use TailwindCSS for a sleek and modern design, ensuring the application is visually appealing and responsive across all devices.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- **Search and Filters:**  
+  Easily search for events by location, date, or category. Users can filter results to find the perfect event to attend.
 
-## Running unit tests
+- **Multi-Currency Support:**  
+  The platform supports multiple currencies, allowing users to purchase tickets in their preferred currency.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- **Event Dashboard:**  
+  Sellers have access to a personalized event dashboard where they can view ticket sales, manage event details, and track earnings.
 
-```bash
-ng test
-```
+- **Social Media Integration:**  
+  Share event details on social media platforms directly from the app to increase visibility and boost ticket sales.
 
-## Running end-to-end tests
+- **Cross-Device Support:**  
+  The app is optimized for desktop, tablet, and mobile devices, providing a consistent and responsive user experience on all screen sizes.
 
-For end-to-end (e2e) testing, run:
+- **Extended Browser Compatibility:**  
+  We ensure the game runs smoothly across all major browsers, providing consistent performance and user experience.
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## BACKEND PART
+  [Visit the backend part](https://github.com/MohamedMQ/BookingEvents)
